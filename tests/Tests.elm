@@ -7,10 +7,25 @@ import String
 
 import Math.Quaternion exposing (..)
 
+floatRelativeTolerance : Float -> Float -> Float -> Bool
+floatRelativeTolerance tolerance a b =
+    if (a == b) then True
+    else abs ((a-b)/a) < tolerance
+
+equateWith : (a -> a -> String) -> (a -> a -> Bool) -> a -> a -> Expect.Expectation
+equateWith failString f a b =
+    if f a b then Expect.pass
+    else Expect.fail (failString a b)
+
+renderResult : String -> a -> a -> String
+renderResult reason a b = toString a ++ "\n╷\n│ " ++ reason ++ "\n╵\n" ++ toString b
+
 floatEqual : Float -> Float -> Expect.Expectation
-floatEqual a b =
-    if (a == b) then Expect.equal a b
-    else Expect.lessThan 0.0000001 <| abs ((a-b)/a)
+floatEqual =
+    let tolerance = 0.0000001
+    in equateWith
+        (renderResult ("floats not within tolerance " ++ toString tolerance))
+        (floatRelativeTolerance tolerance)
 
 all : Test
 all =
