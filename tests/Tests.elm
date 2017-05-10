@@ -2,14 +2,20 @@ module Tests exposing (..)
 
 import Test exposing (..)
 import Expect
-import Fuzz exposing (list, int, tuple, string)
+import Fuzz exposing (list, int, float, tuple, string)
 import String
 
+import Math.Quaternion exposing (..)
+
+floatEqual : Float -> Float -> Expect.Expectation
+floatEqual a b =
+    if (a == b) then Expect.equal a b
+    else Expect.lessThan 0.0000001 <| abs ((a-b)/a)
 
 all : Test
 all =
-    describe "Sample Test Suite"
-        [ describe "Unit test examples"
+    describe "Quaternion Test Suite"
+        [ describe "Trivial tests"
             [ test "Addition" <|
                 \() ->
                     Expect.equal (3 + 7) 10
@@ -17,10 +23,9 @@ all =
                 \() ->
                     Expect.equal "a" (String.left 1 "abcdefg")
             ]
-        , describe "Fuzz test examples, using randomly generated input"
-            [ fuzz (list int) "Lists always have positive length" <|
-                \aList ->
-                    List.length aList |> Expect.atLeast 0
+        , describe "Getter/setter tests"
+            [ fuzz float "get (fromscalar)" <|
+                \f -> getScalar (fromScalar f) |> floatEqual f
             , fuzz (list int) "Sorting a list does not change its length" <|
                 \aList ->
                     List.sort aList |> List.length |> Expect.equal (List.length aList)
