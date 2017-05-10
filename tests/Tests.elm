@@ -27,13 +27,27 @@ floatEqual =
         (renderResult ("floats not within tolerance " ++ toString tolerance))
         (floatRelativeTolerance tolerance)
 
+qnComponentRelativeTolerance : Float -> Quaternion -> Quaternion -> Bool
+qnComponentRelativeTolerance tolerance a b =
+    floatRelativeTolerance tolerance (getScalar a) (getScalar b)
+    && floatRelativeTolerance tolerance (getI a) (getI b)
+    && floatRelativeTolerance tolerance (getJ a) (getJ b)
+    && floatRelativeTolerance tolerance (getK a) (getK b)
+
+qnEqual : Quaternion -> Quaternion -> Expect.Expectation
+qnEqual =
+    let tolerance = 0.0000001
+    in equateWith
+        (renderResult ("Components not within tolerance " ++ toString tolerance))
+        (qnComponentRelativeTolerance tolerance)
+
 all : Test
 all =
     describe "Quaternion Test Suite"
         [ describe "Trivial tests"
-            [ test "Addition" <|
+            [ test "Unit" <|
                 \() ->
-                    Expect.equal (3 + 7) 10
+                    qnEqual unit (fromScalar 1)
             , test "String.left" <|
                 \() ->
                     Expect.equal "a" (String.left 1 "abcdefg")
