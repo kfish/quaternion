@@ -6,6 +6,7 @@ import Fuzz exposing (Fuzzer, list, int, float, tuple, string)
 import String
 
 import Math.Quaternion as Qn exposing (..)
+import Math.Vector3 as V3 exposing (Vec3)
 
 floatRelativeTolerance : Float -> Float -> Float -> Bool
 floatRelativeTolerance tolerance a b =
@@ -41,8 +42,24 @@ qnEqual =
         (renderResult ("Components not within tolerance " ++ toString tolerance))
         (qnComponentRelativeTolerance tolerance)
 
+vec3ComponentRelativeTolerance : Float -> Vec3 -> Vec3 -> Bool
+vec3ComponentRelativeTolerance tolerance a b =
+    floatRelativeTolerance tolerance (V3.getX a) (V3.getX b)
+    && floatRelativeTolerance tolerance (V3.getY a) (V3.getY b)
+    && floatRelativeTolerance tolerance (V3.getZ a) (V3.getZ b)
+
+vec3Equal : Vec3 -> Vec3 -> Expect.Expectation
+vec3Equal =
+    let tolerance = 0.0000001
+    in equateWith
+        (renderResult ("Components not within tolerance " ++ toString tolerance))
+        (vec3ComponentRelativeTolerance tolerance)
+
 quaternion : Fuzzer Quaternion
 quaternion = Fuzz.map4 Qn.quaternion float float float float
+
+vec3 : Fuzzer Vec3
+vec3 = Fuzz.map3 V3.vec3 float float float
 
 all : Test
 all =
@@ -60,6 +77,8 @@ all =
                 \f -> (fromScalar >> getScalar) f |> floatEqual f
             , fuzz quaternion "(negate >> negate) == identity" <|
                 \q -> (Qn.negate >> Qn.negate) q |> qnEqual q
+            , fuzz vec3 "(fromVec3 >> toVec3) == identity" <|
+                \v -> (fromVec3 >> toVec3) v |> vec3Equal v
             , fuzz (list int) "Sorting a list does not change its length" <|
                 \aList ->
                     List.sort aList |> List.length |> Expect.equal (List.length aList)
