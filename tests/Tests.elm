@@ -68,9 +68,6 @@ all =
             [ test "Unit" <|
                 \() ->
                     qnEqual unit (fromScalar 1)
-            , test "String.left" <|
-                \() ->
-                    Expect.equal "a" (String.left 1 "abcdefg")
             ]
         , describe "Getter/setter tests"
             [ fuzz float "(fromscalar >> getScalar) == identity" <|
@@ -79,14 +76,5 @@ all =
                 \q -> (Qn.negate >> Qn.negate) q |> qnEqual q
             , fuzz vec3 "(fromVec3 >> toVec3) == identity" <|
                 \v -> (fromVec3 >> toVec3) v |> vec3Equal v
-            , fuzz (list int) "Sorting a list does not change its length" <|
-                \aList ->
-                    List.sort aList |> List.length |> Expect.equal (List.length aList)
-            , fuzzWith { runs = 1000 } int "List.member will find an integer in a list containing it" <|
-                \i ->
-                    List.member i [ i ] |> Expect.true "If you see this, List.member returned False!"
-            , fuzz2 string string "The length of a string equals the sum of its substrings' lengths" <|
-                \s1 s2 ->
-                    s1 ++ s2 |> String.length |> Expect.equal (String.length s1 + String.length s2)
             ]
         ]
