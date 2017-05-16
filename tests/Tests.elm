@@ -4,10 +4,10 @@ import Test exposing (..)
 import Expect
 import Fuzz
 import String
-
 import Math.Quaternion as Qn exposing (..)
 import QnExpect as Expect exposing (..)
 import QnFuzz as Fuzz exposing (..)
+
 
 all : Test
 all =
