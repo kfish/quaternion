@@ -23,10 +23,8 @@ Quaternions
 -}
 
 import Math.Matrix4 as M4
-import Math.Vector3 exposing (Vec3, vec3)
-import Math.Vector3 as V3
-import Math.Vector4 exposing (Vec4, vec4)
-import Math.Vector4 as V4
+import Math.Vector3 as V3 exposing (Vec3, vec3)
+import Math.Vector4 as V4 exposing (Vec4, vec4)
 
 {-| Quaternion type -}
 type alias Quaternion = Vec4
