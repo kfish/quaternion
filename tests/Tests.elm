@@ -2,10 +2,10 @@ module Tests exposing (..)
 
 import Test exposing (..)
 import Expect
-import Fuzz exposing (list, int, float, tuple, string)
+import Fuzz exposing (Fuzzer, list, int, float, tuple, string)
 import String
 
-import Math.Quaternion exposing (..)
+import Math.Quaternion as Qn exposing (..)
 
 floatRelativeTolerance : Float -> Float -> Float -> Bool
 floatRelativeTolerance tolerance a b =
@@ -41,6 +41,9 @@ qnEqual =
         (renderResult ("Components not within tolerance " ++ toString tolerance))
         (qnComponentRelativeTolerance tolerance)
 
+quaternion : Fuzzer Quaternion
+quaternion = Fuzz.map4 Qn.quaternion float float float float
+
 all : Test
 all =
     describe "Quaternion Test Suite"
@@ -53,8 +56,10 @@ all =
                     Expect.equal "a" (String.left 1 "abcdefg")
             ]
         , describe "Getter/setter tests"
-            [ fuzz float "get (fromscalar)" <|
-                \f -> getScalar (fromScalar f) |> floatEqual f
+            [ fuzz float "(fromscalar >> getScalar) == identity" <|
+                \f -> (fromScalar >> getScalar) f |> floatEqual f
+            , fuzz quaternion "(negate >> negate) == identity" <|
+                \q -> (Qn.negate >> Qn.negate) q |> qnEqual q
             , fuzz (list int) "Sorting a list does not change its length" <|
                 \aList ->
                     List.sort aList |> List.length |> Expect.equal (List.length aList)
