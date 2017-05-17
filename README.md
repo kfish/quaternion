@@ -60,6 +60,8 @@ Also, quaternions are faster than matrices due to 4 components not 9.
 
 [W3C DeviceOrientation Event Specification](https://www.w3.org/TR/orientation-event/)
 
+[Practical Application and Usage of the W3C Device Orientation API](http://dev.opera.com/articles/w3c-device-orientation-usage/)
+
 ## References
 
 [Euclidean Space: Quaternions](http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/)
