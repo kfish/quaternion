@@ -5,9 +5,9 @@ _Impossible transforms are inexpressible_
 
 Quaternions have the following advantages over matrix transformations:
 
-	* No gimbal lock
-	* No impoossible transforms
-	* Faster
+* No gimbal lock
+* No impoossible transforms
+* Faster
 
 with the primary disadvantage being that quaternions are more difficult to
 understand.
@@ -30,7 +30,9 @@ is everything you need for world transforms.
 
 Also, quaternions are faster than matrices due to 4 components not 9.
 
-## Euler Angles
+## Euler angles
+
+## Flight dynamics
 
 ## References
 
