@@ -4,6 +4,21 @@ module Math.Quaternion exposing (..)
 
 Quaternions
 
+Can express rotations, but not shearing, scaling or translations
+
+Translations are trivial
+
+Shearing and scaling don't happen in the real world
+
+Scaling is trivial
+
+So, a combination of translation and orientation (via quaternions)
+is everything you need for world transforms.
+
+Impossible transforms are inexpressible
+
+Also, quaternions are faster than matrices due to 4 components not 9.
+
 # Types
 @docs Quaternion
 
