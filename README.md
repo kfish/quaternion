@@ -56,6 +56,10 @@ Also, quaternions are faster than matrices due to 4 components not 9.
 
 [NPSNET: FLIGHT SIMULATION DYNAMIC MODELING USING QUATERNIONS](http://www.movesinstitute.org/~zyda/pubs/Presence.1.4.pdf)
 
+### Device orientation
+
+[W3C DeviceOrientation Event Specification](https://www.w3.org/TR/orientation-event/)
+
 ## References
 
 [Euclidean Space: Quaternions](http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/)
