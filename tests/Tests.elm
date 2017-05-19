@@ -34,4 +34,8 @@ all =
             , fuzz Fuzz.vec3 "(fromVec3 >> toVec3) v == v" <|
                 \v -> (fromVec3 >> toVec3) v |> vec3Equal v
             ]
+        , describe "property tests"
+            [ fuzz Fuzz.quaternion "(normalize >> length) q == 1" <|
+                \q -> (normalize >> length) q |> floatEqual 1.0
+            ]
         ]
