@@ -1,3 +1,7 @@
+[![Build status](https://travis-ci.org/kfish/quaternion.svg?branch=master)][travis]
+
+[travis]: https://travis-ci.org/kfish/quaternion
+
 # Quaternions
 
 _Impossible transforms are inexpressible_
