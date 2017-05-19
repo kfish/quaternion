@@ -1,6 +1,7 @@
 module QnExpect
     exposing
-        ( floatEqual
+        ( all_
+        , floatEqual
         , qnEqual
         , vec3Equal
         )
@@ -8,6 +9,18 @@ module QnExpect
 import Expect exposing (Expectation)
 import Math.Quaternion as Qn exposing (Quaternion, getScalar, getI, getJ, getK)
 import Math.Vector3 as V3 exposing (Vec3, getX, getY, getZ)
+
+
+{- | A variant of Expect.all that does not take an argument.
+   Rather, the expectations take their arguments from the enclosing
+   scope. This allows them to take different arguments, eg. to
+   check each component of a tuple.
+-}
+
+
+all_ : List Expectation -> Expectation
+all_ es =
+    Expect.all (List.map always es) 0
 
 
 floatRelativeTolerance : Float -> Float -> Float -> Bool

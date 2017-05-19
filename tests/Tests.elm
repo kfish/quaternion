@@ -25,8 +25,32 @@ all =
                 \f -> (fromScalar >> getScalar) f |> floatEqual f
             , fuzz Fuzz.float "(fromscalar >> getScalar) q == q" <|
                 \f -> (fromScalar >> getScalar) f |> floatEqual f
-            , fuzz Fuzz.float "setI f q |> getI == f"  <|
+            , fuzz Fuzz.float "setI f q |> getI == f" <|
                 \f -> (getI (setI 7 unit)) |> floatEqual 7
+            , fuzz Fuzz.floatTuple4 "(fromTuple >> toTuple) t == t" <|
+                \( s, i, j, k ) ->
+                    let
+                        ( s_, i_, j_, k_ ) =
+                            (fromTuple >> toTuple) ( s, i, j, k )
+                    in
+                        Expect.all_
+                            [ floatEqual s s_
+                            , floatEqual i i_
+                            , floatEqual j j_
+                            , floatEqual k k_
+                            ]
+            , fuzz Fuzz.floatRecord4 "(fromRecord >> toRecord) r == r" <|
+                \input ->
+                    let
+                        output =
+                            (fromRecord >> toRecord) input
+                    in
+                        Expect.all_
+                            [ floatEqual input.s output.s
+                            , floatEqual input.i output.i
+                            , floatEqual input.j output.j
+                            , floatEqual input.k output.k
+                            ]
             ]
         , describe "Identity tests"
             [ fuzz Fuzz.quaternion "(negate >> negate) q == q" <|
