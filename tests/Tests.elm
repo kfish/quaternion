@@ -8,7 +8,6 @@ import Math.Quaternion as Qn exposing (..)
 import QnExpect as Expect exposing (..)
 import QnFuzz as Fuzz exposing (..)
 
-
 all : Test
 all =
     describe "Quaternion Test Suite"
@@ -27,6 +26,10 @@ all =
                 \f -> (fromScalar >> getScalar) f |> floatEqual f
             , fuzz Fuzz.float "setI f q |> getI == f" <|
                 \f -> (getI (setI 7 unit)) |> floatEqual 7
+            , fuzz Fuzz.float "setJ f q |> getI == f"  <|
+                \f -> (getJ (setJ 7 unit)) |> floatEqual 7
+            , fuzz Fuzz.float "setK f q |> getI == f"  <|
+                \f -> (getK (setK 7 unit)) |> floatEqual 7
             ]
         , describe "Identity tests"
             [ fuzz Fuzz.floatTuple4 "(fromTuple >> toTuple) t == t" <|
