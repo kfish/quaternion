@@ -27,7 +27,9 @@ all =
                 \f -> (fromScalar >> getScalar) f |> floatEqual f
             , fuzz Fuzz.float "setI f q |> getI == f" <|
                 \f -> (getI (setI 7 unit)) |> floatEqual 7
-            , fuzz Fuzz.floatTuple4 "(fromTuple >> toTuple) t == t" <|
+            ]
+        , describe "Identity tests"
+            [ fuzz Fuzz.floatTuple4 "(fromTuple >> toTuple) t == t" <|
                 \( s, i, j, k ) ->
                     let
                         ( s_, i_, j_, k_ ) =
@@ -51,9 +53,17 @@ all =
                             , floatEqual input.j output.j
                             , floatEqual input.k output.k
                             ]
-            ]
-        , describe "Identity tests"
-            [ fuzz Fuzz.quaternion "(negate >> negate) q == q" <|
+            , fuzz Fuzz.scalarVector "(fromSV >> toSV) sv == sv" <|
+                \( s, v ) ->
+                    let
+                        ( s_, v_ ) =
+                            (fromSV >> toSV) ( s, v )
+                    in
+                        Expect.all_
+                            [ floatEqual s s_
+                            , vec3Equal v v_
+                            ]
+            , fuzz Fuzz.quaternion "(negate >> negate) q == q" <|
                 \q -> (Qn.negate >> Qn.negate) q |> qnEqual q
             , fuzz Fuzz.vec3 "(fromVec3 >> toVec3) v == v" <|
                 \v -> (fromVec3 >> toVec3) v |> vec3Equal v

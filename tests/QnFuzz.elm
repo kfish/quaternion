@@ -4,6 +4,7 @@ module QnFuzz
         , vec3
         , floatTuple4
         , floatRecord4
+        , scalarVector
         )
 
 import Fuzz exposing (Fuzzer, list, int, float, tuple, string)
@@ -29,3 +30,8 @@ floatTuple4 =
 floatRecord4 : Fuzzer { s : Float, i : Float, j : Float, k : Float }
 floatRecord4 =
     Fuzz.map4 (\s i j k -> { s = s, i = i, j = j, k = k }) float float float float
+
+
+scalarVector : Fuzzer ( Float, Vec3 )
+scalarVector =
+    Fuzz.map2 (,) float vec3
