@@ -253,17 +253,17 @@ https://en.wikipedia.org/wiki/Euler_angles#Tait.E2.80.93Bryan_angles
 fromYawPitchRoll : (Float, Float, Float) -> Quaternion
 fromYawPitchRoll (yaw, pitch, roll) =
   let
-    t0 = cos (yaw/2)
-    t1 = sin (yaw/2)
-    t2 = cos (roll/2)
-    t3 = sin (roll/2)
-    t4 = cos (pitch/2)
-    t5 = sin (pitch/2)
+    cYaw = cos (yaw/2)
+    sYaw = sin (yaw/2)
+    cRoll = cos (roll/2)
+    sRoll = sin (roll/2)
+    cPitch = cos (pitch/2)
+    sPitch = sin (pitch/2)
 
-    q0 = t0 * t2 * t4 + t1 * t3 * t5
-    q1 = t0 * t3 * t4 - t1 * t2 * t5
-    q2 = t0 * t2 * t5 + t1 * t3 * t4
-    q3 = t1 * t2 * t4 - t0 * t3 * t5
+    q0 = cYaw * cRoll * cPitch + sYaw * sRoll * sPitch
+    q1 = cYaw * sRoll * cPitch - sYaw * cRoll * sPitch
+    q2 = cYaw * cRoll * sPitch + sYaw * sRoll * cPitch
+    q3 = sYaw * cRoll * cPitch - cYaw * sRoll * sPitch
 
   in quaternion q0 q1 q2 q3
 
