@@ -2,6 +2,7 @@ module QnExpect
     exposing
         ( all_
         , floatEqual
+        , angleEqual
         , qnEqual
         , vec3Equal
         )
@@ -58,6 +59,20 @@ floatEqual =
             (renderResult ("floats not within tolerance " ++ toString tolerance))
             (floatRelativeTolerance tolerance)
 
+angleRelativeTolerance : Float -> Float -> Float -> Bool
+angleRelativeTolerance tolerance a b =
+    floatRelativeTolerance tolerance (sin a) (sin b) &&
+    floatRelativeTolerance tolerance (cos a) (cos b)
+
+angleEqual : Float -> Float -> Expectation
+angleEqual =
+    let
+        tolerance =
+            0.1
+    in
+        equateWith
+            (renderResult ("angles not within tolerance " ++ toString tolerance))
+            (angleRelativeTolerance tolerance)
 
 qnComponentRelativeTolerance : Float -> Quaternion -> Quaternion -> Bool
 qnComponentRelativeTolerance tolerance a b =

@@ -101,21 +101,21 @@ all =
                         ( yaw_, pitch_, roll_ ) =
                             (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
                     in
-                        floatEqual yaw yaw_
+                        angleEqual yaw yaw_
             , fuzz Fuzz.floatTuple3 "(fromYawPitchRoll >> toYawPitchRoll) pitch == pitch" <|
                 \( yaw, pitch, roll ) ->
                     let
                         ( yaw_, pitch_, roll_ ) =
                             (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
                     in
-                        floatEqual pitch pitch_
+                        angleEqual pitch pitch_
             , fuzz Fuzz.floatTuple3 "(fromYawPitchRoll >> toYawPitchRoll) roll == roll" <|
                 \( yaw, pitch, roll ) ->
                     let
                         ( yaw_, pitch_, roll_ ) =
                             (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
                     in
-                        floatEqual roll roll_
+                        angleEqual roll roll_
             , fuzz Fuzz.quaternion "(negate >> negate) q == q" <|
                 \q -> (Qn.negate >> Qn.negate) q |> qnEqual q
             , fuzz Fuzz.vec3 "(fromVec3 >> toVec3) v == v" <|
