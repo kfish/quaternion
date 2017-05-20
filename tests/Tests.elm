@@ -28,6 +28,38 @@ all =
             , fuzz Fuzz.float "setI f q |> getI == f" <|
                 \f -> (getI (setI 7 unit)) |> floatEqual 7
             ]
+        , describe "Euler angle tests"
+            [ test "(fromEuler >> toEuler) (0, 0, 0) phi" <|
+                \() ->
+                    let (phi, tau, psi) =
+                            (fromEuler >> toEuler) (0, 0, 0)
+                    in floatEqual 0 phi
+            , test "(fromEuler >> toEuler) (0, 0, 0) tau" <|
+                \() ->
+                    let (phi, tau, psi) =
+                            (fromEuler >> toEuler) (0, 0, 0)
+                    in floatEqual 0 tau
+            , test "(fromEuler >> toEuler) (0, 0, 0) psi" <|
+                \() ->
+                    let (phi, tau, psi) =
+                            (fromEuler >> toEuler) (0, 0, 0)
+                    in floatEqual 0 psi
+            , test "(fromEuler >> toEuler) (pi, pi, pi) phi" <|
+                \() ->
+                    let (phi, tau, psi) =
+                            (fromEuler >> toEuler) (pi, pi, pi)
+                    in floatEqual 0 phi
+            , test "(fromEuler >> toEuler) (pi, pi, pi) tau" <|
+                \() ->
+                    let (phi, tau, psi) =
+                            (fromEuler >> toEuler) (pi, pi, pi)
+                    in floatEqual pi tau
+            , test "(fromEuler >> toEuler) (pi, pi, pi) psi" <|
+                \() ->
+                    let (phi, tau, psi) =
+                            (fromEuler >> toEuler) (pi, pi, pi)
+                    in floatEqual pi psi
+            ]
         , describe "Identity tests"
             [ fuzz Fuzz.floatTuple4 "(fromTuple >> toTuple) t == t" <|
                 \( s, i, j, k ) ->
