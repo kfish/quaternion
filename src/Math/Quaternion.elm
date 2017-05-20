@@ -271,24 +271,21 @@ fromYawPitchRoll (yaw, pitch, roll) =
 toYawPitchRoll : Quaternion -> (Float, Float, Float)
 toYawPitchRoll q =
     let 
-        (w, x, y, z) = toTuple q
+        (q0, q1, q2, q3) = toTuple q
 
-        ysqr = y*y
+        q2q2 = q2*q2
 
-        t0 = 2 * (w*x + y*z)
-        t1 = 1 - 2*(x*x + ysqr)
+        r0 = 2 * (q0*q1 + q2*q3)
+        r1 = 1 - 2*(q1*q1 + q2q2)
+        roll = atan2 r0 r1
 
-        roll = atan2 t0 t1
-
-        t2_0 = 2 * (w*y - z*x)
-
+        t2_0 = 2 * (q0*q2 - q3*q1)
         t2_1 = if t2_0 > 1.0 then 1.0 else t2_0
         t2 = if t2_1 < -1.0 then -1.0 else t2_1
-
         pitch = asin t2
 
-        t3 = 2.0 * (w*z + x*y)
-        t4 = 1 - 2.0 * (ysqr + z*z)
+        t3 = 2.0 * (q0*q3 + q1*q2)
+        t4 = 1 - 2.0 * (q2q2 + q3*q3)
         yaw = atan2 t3 t4
 
     in (yaw, pitch, roll)
