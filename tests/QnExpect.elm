@@ -27,6 +27,10 @@ floatRelativeTolerance : Float -> Float -> Float -> Bool
 floatRelativeTolerance tolerance a b =
     if (a == b) then
         True
+    else if (a == 0) then
+        abs b < tolerance
+    else if (b == 0) then
+        abs a < tolerance
     else
         abs ((a - b) / a) < tolerance
 
