@@ -95,29 +95,27 @@ all =
                             [ floatEqual s s_
                             , vec3Equal v v_
                             ]
-{-
-            , fuzz Fuzz.floatTuple3 "(fromEuler >> toEuler) phi == phi" <|
-                \( phi, tau, psi ) ->
+            , fuzz Fuzz.floatTuple3 "(fromYawPitchRoll >> toYawPitchRoll) yaw == yaw" <|
+                \( yaw, pitch, roll ) ->
                     let
-                        ( phi_, tau_, psi_ ) =
-                            (fromEuler >> toEuler) ( phi, tau, psi )
+                        ( yaw_, pitch_, roll_ ) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
                     in
-                        floatEqual phi phi_
-            , fuzz Fuzz.floatTuple3 "(fromEuler >> toEuler) tau == tau" <|
-                \( phi, tau, psi ) ->
+                        floatEqual yaw yaw_
+            , fuzz Fuzz.floatTuple3 "(fromYawPitchRoll >> toYawPitchRoll) pitch == pitch" <|
+                \( yaw, pitch, roll ) ->
                     let
-                        ( phi_, tau_, psi_ ) =
-                            (fromEuler >> toEuler) ( phi, tau, psi )
+                        ( yaw_, pitch_, roll_ ) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
                     in
-                        floatEqual tau tau_
-            , fuzz Fuzz.floatTuple3 "(fromEuler >> toEuler) psi == psi" <|
-                \( phi, tau, psi ) ->
+                        floatEqual pitch pitch_
+            , fuzz Fuzz.floatTuple3 "(fromYawPitchRoll >> toYawPitchRoll) roll == roll" <|
+                \( yaw, pitch, roll ) ->
                     let
-                        ( phi_, tau_, psi_ ) =
-                            (fromEuler >> toEuler) ( phi, tau, psi )
+                        ( yaw_, pitch_, roll_ ) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
                     in
-                        floatEqual psi psi_
--}
+                        floatEqual roll roll_
             , fuzz Fuzz.quaternion "(negate >> negate) q == q" <|
                 \q -> (Qn.negate >> Qn.negate) q |> qnEqual q
             , fuzz Fuzz.vec3 "(fromVec3 >> toVec3) v == v" <|
