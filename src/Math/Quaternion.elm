@@ -264,19 +264,6 @@ fromYawPitchRoll (yaw, pitch, roll) =
     q1 = t0 * t3 * t4 - t1 * t2 * t5
     q2 = t0 * t2 * t5 + t1 * t3 * t4
     q3 = t1 * t2 * t4 - t0 * t3 * t5
-{-
-    spsi = sin (psi/2)
-    cpsi = cos (psi/2)
-    stheta = sin (theta/2)
-    ctheta = cos (theta/2)
-    sphi = sin (phi/2)
-    cphi = cos (phi/2)
-
-    q0 = cphi * ctheta * cpsi + sphi * stheta * spsi
-    q1 = sphi * ctheta * cpsi - cphi * stheta * spsi
-    q2 = cphi * stheta * cpsi + sphi * ctheta * spsi
-    q3 = cphi * ctheta * spsi - sphi * stheta * cpsi
--}
 
   in quaternion q0 q1 q2 q3
 
@@ -284,7 +271,6 @@ fromYawPitchRoll (yaw, pitch, roll) =
 toYawPitchRoll : Quaternion -> (Float, Float, Float)
 toYawPitchRoll q =
     let 
-        -- (q0, q1, q2, q3) = toTuple q
         (w, x, y, z) = toTuple q
 
         ysqr = y*y
@@ -305,13 +291,6 @@ toYawPitchRoll q =
         t4 = 1 - 2.0 * (ysqr + z*z)
         yaw = atan2 t3 t4
 
-{-
-        phi = atan2 (2 * (q0*q1 + q2*q3)) (1 - 2*(q1*q1 + q2*q2))
-        theta = asin (2 * (q0*q2 - q3*q1))
-        psi = atan2 (2 * (q0*q3 + q1*q2)) (1 - 2*(q2*q2 + q3*q3))
-
-    in (phi, theta, psi)
--}
     in (yaw, pitch, roll)
 
 
