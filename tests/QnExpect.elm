@@ -27,10 +27,10 @@ floatRelativeTolerance : Float -> Float -> Float -> Bool
 floatRelativeTolerance tolerance a b =
     if (a == b) then
         True
-    else if (a == 0) then
-        abs b < tolerance
-    else if (b == 0) then
-        abs a < tolerance
+    else if (abs a < 10*tolerance) then
+        abs (a - b) < (10*tolerance)
+    else if (abs b < 10*tolerance) then
+        abs (a - b) < (10*tolerance)
     else
         abs ((a - b) / a) < tolerance
 
@@ -52,7 +52,7 @@ floatEqual : Float -> Float -> Expectation
 floatEqual =
     let
         tolerance =
-            0.0000001
+            0.01
     in
         equateWith
             (renderResult ("floats not within tolerance " ++ toString tolerance))
