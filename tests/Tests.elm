@@ -28,37 +28,37 @@ all =
             , fuzz Fuzz.float "setI f q |> getI == f" <|
                 \f -> (getI (setI 7 unit)) |> floatEqual 7
             ]
-        , describe "Euler angle tests"
-            [ test "(fromEuler >> toEuler) (0, 0, 0) phi" <|
+        , describe "Yaw-Pitch-Roll tests"
+            [ test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) yaw" <|
                 \() ->
-                    let (phi, tau, psi) =
-                            (fromEuler >> toEuler) (0, 0, 0)
-                    in floatEqual 0 phi
-            , test "(fromEuler >> toEuler) (0, 0, 0) tau" <|
+                    let (yaw, pitch, roll) =
+                            (fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0)
+                    in floatEqual 0 yaw
+            , test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) pitch" <|
                 \() ->
-                    let (phi, tau, psi) =
-                            (fromEuler >> toEuler) (0, 0, 0)
-                    in floatEqual 0 tau
-            , test "(fromEuler >> toEuler) (0, 0, 0) psi" <|
+                    let (yaw, pitch, roll) =
+                            (fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0)
+                    in floatEqual 0 pitch
+            , test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) roll" <|
                 \() ->
-                    let (phi, tau, psi) =
-                            (fromEuler >> toEuler) (0, 0, 0)
-                    in floatEqual 0 psi
-            , test "(fromEuler >> toEuler) (pi, pi, pi) phi" <|
+                    let (yaw, pitch, roll) =
+                            (fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0)
+                    in floatEqual 0 roll
+            , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) yaw" <|
                 \() ->
-                    let (phi, tau, psi) =
-                            (fromEuler >> toEuler) (pi, pi, pi)
-                    in floatEqual 0 phi
-            , test "(fromEuler >> toEuler) (pi, pi, pi) tau" <|
+                    let (yaw, pitch, roll) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4))
+                    in floatEqual (pi/4) yaw
+            , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) pitch" <|
                 \() ->
-                    let (phi, tau, psi) =
-                            (fromEuler >> toEuler) (pi, pi, pi)
-                    in floatEqual pi tau
-            , test "(fromEuler >> toEuler) (pi, pi, pi) psi" <|
+                    let (yaw, pitch, roll) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4))
+                    in floatEqual (pi/4) pitch
+            , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) roll" <|
                 \() ->
-                    let (phi, tau, psi) =
-                            (fromEuler >> toEuler) (pi, pi, pi)
-                    in floatEqual pi psi
+                    let (yaw, pitch, roll) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4))
+                    in floatEqual (pi/4) roll
             ]
         , describe "Identity tests"
             [ fuzz Fuzz.floatTuple4 "(fromTuple >> toTuple) t == t" <|
@@ -95,6 +95,7 @@ all =
                             [ floatEqual s s_
                             , vec3Equal v v_
                             ]
+{-
             , fuzz Fuzz.floatTuple3 "(fromEuler >> toEuler) phi == phi" <|
                 \( phi, tau, psi ) ->
                     let
@@ -116,6 +117,7 @@ all =
                             (fromEuler >> toEuler) ( phi, tau, psi )
                     in
                         floatEqual psi psi_
+-}
             , fuzz Fuzz.quaternion "(negate >> negate) q == q" <|
                 \q -> (Qn.negate >> Qn.negate) q |> qnEqual q
             , fuzz Fuzz.vec3 "(fromVec3 >> toVec3) v == v" <|

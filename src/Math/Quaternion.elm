@@ -23,7 +23,7 @@ Also, quaternions are faster than matrices due to 4 components not 9.
 @docs Quaternion
 
 # Create
-@docs unit, quaternion, fromAngleAxis, fromEuler, fromRecord, fromSV, fromScalar, fromTo, fromTo2, fromTuple, fromVec3, orient
+@docs unit, quaternion, fromAngleAxis, fromEuler, fromRecord, fromSV, fromScalar, fromTo, fromTo2, fromTuple, fromVec3, orient, fromYawPitchRoll, toYawPitchRoll
 
 # Get and Set
 @docs getI, getJ, getK, getScalar, getAngle, getAxis, setI, setJ, setK, setScalar
@@ -245,6 +245,76 @@ fromAngleAxis twoTheta v =
         s = sin theta
     in vec4 c (x*s) (y*s) (z*s)
 
+{-| Construction from Tait-Bryan angles representing
+(yaw, pitch, roll)
+
+https://en.wikipedia.org/wiki/Euler_angles#Tait.E2.80.93Bryan_angles
+-}
+fromYawPitchRoll : (Float, Float, Float) -> Quaternion
+fromYawPitchRoll (yaw, pitch, roll) =
+  let
+    t0 = cos (yaw/2)
+    t1 = sin (yaw/2)
+    t2 = cos (roll/2)
+    t3 = sin (roll/2)
+    t4 = cos (pitch/2)
+    t5 = sin (pitch/2)
+
+    q0 = t0 * t2 * t4 + t1 * t3 * t5
+    q1 = t0 * t3 * t4 - t1 * t2 * t5
+    q2 = t0 * t2 * t5 + t1 * t3 * t4
+    q3 = t1 * t2 * t4 - t0 * t3 * t5
+{-
+    spsi = sin (psi/2)
+    cpsi = cos (psi/2)
+    stheta = sin (theta/2)
+    ctheta = cos (theta/2)
+    sphi = sin (phi/2)
+    cphi = cos (phi/2)
+
+    q0 = cphi * ctheta * cpsi + sphi * stheta * spsi
+    q1 = sphi * ctheta * cpsi - cphi * stheta * spsi
+    q2 = cphi * stheta * cpsi + sphi * ctheta * spsi
+    q3 = cphi * ctheta * spsi - sphi * stheta * cpsi
+-}
+
+  in quaternion q0 q1 q2 q3
+
+{-| Convert to Yaw, Pitch, Roll -}
+toYawPitchRoll : Quaternion -> (Float, Float, Float)
+toYawPitchRoll q =
+    let 
+        -- (q0, q1, q2, q3) = toTuple q
+        (w, x, y, z) = toTuple q
+
+        ysqr = y*y
+
+        t0 = 2 * (w*x + y*z)
+        t1 = 1 - 2*(x*x + ysqr)
+
+        roll = atan2 t0 t1
+
+        t2_0 = 2 * (w*y - z*x)
+
+        t2_1 = if t2_0 > 1.0 then 1.0 else t2_0
+        t2 = if t2_1 < -1.0 then -1.0 else t2_1
+
+        pitch = asin t2
+
+        t3 = 2.0 * (w*z + x*y)
+        t4 = 1 - 2.0 * (ysqr + z*z)
+        yaw = atan2 t3 t4
+
+{-
+        phi = atan2 (2 * (q0*q1 + q2*q3)) (1 - 2*(q1*q1 + q2*q2))
+        theta = asin (2 * (q0*q2 - q3*q1))
+        psi = atan2 (2 * (q0*q3 + q1*q2)) (1 - 2*(q2*q2 + q3*q3))
+
+    in (phi, theta, psi)
+-}
+    in (yaw, pitch, roll)
+
+
 {-| Construction from Euler angles representing (roll, pitch, yaw),
 often denoted phi, tau, psi -}
 fromEuler : (Float, Float, Float) -> Quaternion
@@ -269,7 +339,8 @@ fromEuler (phi, tau, psi) =
         i = sphi * ctau * cpsi - cphi * stau * spsi
         j = cphi * stau * cpsi + sphi * ctau * spsi
         k = cphi * ctau * spsi - sphi * stau * cpsi
-    in quaternion s j k i -- fromFlightDynamics
+    -- in quaternion s j k i -- fromFlightDynamics
+    in quaternion s i j k
         
 {-| Convert to Euler angles representing (roll, pitch, yaw),
 often denoted (phi, tau, psi) -}
@@ -277,7 +348,8 @@ toEuler : Quaternion -> (Float, Float, Float)
 toEuler q =
     let
         -- Translate from flight dynamics coordinate system
-        (q0, q2, q3, q1) = toTuple q
+        -- (q0, q2, q3, q1) = toTuple q
+        (q0, q1, q2, q3) = toTuple q
 
         -- https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Euler_Angles_from_Quaternion
         phi = atan2 (2 * (q0*q1 + q2*q3)) (1 - 2 * (q1*q1 + q2*q2))
