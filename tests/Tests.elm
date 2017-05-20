@@ -63,6 +63,17 @@ all =
                             [ floatEqual s s_
                             , vec3Equal v v_
                             ]
+            , fuzz Fuzz.floatTuple3 "(fromEuler >> toEuler) sv == sv" <|
+                \( phi, tau, psi ) ->
+                    let
+                        ( phi_, tau_, psi_ ) =
+                            (fromEuler >> toEuler) ( phi, tau, psi )
+                    in
+                        Expect.all_
+                            [ floatEqual phi phi_
+                            , floatEqual tau tau_
+                            , floatEqual psi psi_
+                            ]
             , fuzz Fuzz.quaternion "(negate >> negate) q == q" <|
                 \q -> (Qn.negate >> Qn.negate) q |> qnEqual q
             , fuzz Fuzz.vec3 "(fromVec3 >> toVec3) v == v" <|

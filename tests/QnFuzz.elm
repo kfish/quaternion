@@ -2,6 +2,7 @@ module QnFuzz
     exposing
         ( quaternion
         , vec3
+        , floatTuple3
         , floatTuple4
         , floatRecord4
         , scalarVector
@@ -20,6 +21,11 @@ quaternion =
 vec3 : Fuzzer Vec3
 vec3 =
     Fuzz.map3 V3.vec3 float float float
+
+
+floatTuple3 : Fuzzer ( Float, Float, Float )
+floatTuple3 =
+    Fuzz.map3 (,,) float float float
 
 
 floatTuple4 : Fuzzer ( Float, Float, Float, Float )
