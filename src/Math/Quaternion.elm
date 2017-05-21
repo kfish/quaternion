@@ -302,50 +302,6 @@ toYawPitchRoll q =
 
     in (yaw, pitch, roll)
 
-
-{-| Construction from Euler angles representing (roll, pitch, yaw),
-often denoted phi, tau, psi -}
-fromEuler : (Float, Float, Float) -> Quaternion
-fromEuler (phi, tau, psi) =
-{-
-    let
-        roll  = quaternion (cos (phi/2)) 0 0 (sin (phi/2))
-        pitch = quaternion (cos (tau/2)) (sin (tau/2)) 0 0
-        yaw   = quaternion (cos (psi/2)) 0 (sin (psi/2)) 0
-    -- in roll `hamilton` pitch `hamilton` yaw
-    in yaw `hamilton` pitch `hamilton` roll
--}
-    let
-        sphi = sin (phi/2)
-        cphi = cos (phi/2)
-        stau = sin (tau/2)
-        ctau = cos (tau/2)
-        spsi = sin (psi/2)
-        cpsi = cos (psi/2)
-
-        s = cphi * ctau * cpsi + sphi * stau * spsi
-        i = sphi * ctau * cpsi - cphi * stau * spsi
-        j = cphi * stau * cpsi + sphi * ctau * spsi
-        k = cphi * ctau * spsi - sphi * stau * cpsi
-    -- in quaternion s j k i -- fromFlightDynamics
-    in quaternion s i j k
-        
-{-| Convert to Euler angles representing (roll, pitch, yaw),
-often denoted (phi, tau, psi) -}
-toEuler : Quaternion -> (Float, Float, Float)
-toEuler q =
-    let
-        -- Translate from flight dynamics coordinate system
-        -- (q0, q2, q3, q1) = toTuple q
-        (q0, q1, q2, q3) = toTuple q
-
-        -- https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Euler_Angles_from_Quaternion
-        phi = atan2 (2 * (q0*q1 + q2*q3)) (1 - 2 * (q1*q1 + q2*q2))
-        tau = asin  (2 * (q0*q2 - q3*q1))
-        psi = atan2 (2 * (q0*q3 + q1*q2)) (1 - 2 * (q2*q2 + q3*q3))
-    in
-        (phi, tau, psi)
-
 {-| Convert to a Mat4 -}
 toMat4 : Quaternion -> M4.Mat4
 toMat4 q =
