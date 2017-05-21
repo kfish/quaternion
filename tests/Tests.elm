@@ -34,8 +34,8 @@ testGetterSetter =
     describe "Getter/setter tests"
         [ fuzz Fuzz.float "(fromScalar >> getScalar) q == q" <|
             \f -> (fromScalar >> getScalar) f |> floatEqual f
-        , fuzz Fuzz.float "(fromscalar >> getScalar) q == q" <|
-            \f -> (fromScalar >> getScalar) f |> floatEqual f
+        , fuzz2 Fuzz.float Fuzz.quaternion "setScalar f q |> getScalar == f" <|
+            \f q -> (getScalar (setScalar f q)) |> floatEqual f
         , fuzz2 Fuzz.float Fuzz.quaternion "setI f q |> getI == f" <|
             \f q -> (getI (setI f q)) |> floatEqual f
         , fuzz2 Fuzz.float Fuzz.quaternion "setJ f q |> getI == f" <|
