@@ -9,8 +9,8 @@ module QnFuzz
         , yawPitchRoll
         )
 
--- import Fuzz exposing (Fuzzer, conditional, float, floatRange)
 import Fuzz exposing (Fuzzer, float, floatRange)
+import Fuzz exposing (map, andThen, constant)
 import Math.Quaternion as Qn exposing (Quaternion)
 import Math.Vector3 as V3 exposing (Vec3)
 
@@ -70,14 +70,40 @@ rawYawPitchRoll =
         (floatRange (-pi/2) (pi/2))
         (floatRange 0 (2*pi))
 
--- XXX: conditional requires elm-test >= 4.0.0
 yawPitchRoll : Fuzzer ( Float, Float, Float)
-yawPitchRoll = rawYawPitchRoll
-{-
 yawPitchRoll = conditional
     { retries = 10
     , fallback = always (0, 0, 0)
     , condition = notVertical
     }
     rawYawPitchRoll
--}
+
+-- Backported from elm-test 4.0.0, remove when bumping dependency
+{-| Conditionally filter a fuzzer to remove occasional undesirable
+ - input. Takes a limit for how many retries to attempt, and a
+ - fallback
+ - function to, if no acceptable input can be found, create one from
+ - an
+ - unacceptable one. Also takes a condition to determine if the
+ - input is
+ - acceptable or not, and finally the fuzzer itself.
+ -
+ - A good number of max retires is ten. A large number of retries
+ - might
+ - blow the stack.
+ -
+ - -}
+conditional : { retries : Int, fallback : a -> a, condition : a -> Bool } -> Fuzzer a -> Fuzzer a
+conditional { retries, fallback, condition } fuzzer =
+    if retries <= 0 then
+        map fallback fuzzer
+    else
+        fuzzer
+            |> andThen
+                (\val ->
+                    if condition val then
+                        constant val
+                    else
+                        conditional { retries = (retries - 1), fallback = fallback, condition = condition } fuzzer
+                )
+
