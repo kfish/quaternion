@@ -28,10 +28,10 @@ floatRelativeTolerance : Float -> Float -> Float -> Bool
 floatRelativeTolerance tolerance a b =
     if (a == b) then
         True
-    else if (abs a < 10*tolerance) then
-        abs (a - b) < (10*tolerance)
-    else if (abs b < 10*tolerance) then
-        abs (a - b) < (10*tolerance)
+    else if (abs a < 10 * tolerance) then
+        abs (a - b) < (10 * tolerance)
+    else if (abs b < 10 * tolerance) then
+        abs (a - b) < (10 * tolerance)
     else
         abs ((a - b) / a) < tolerance
 
@@ -59,10 +59,12 @@ floatEqual =
             (renderResult ("floats not within tolerance " ++ toString tolerance))
             (floatRelativeTolerance tolerance)
 
+
 angleRelativeTolerance : Float -> Float -> Float -> Bool
 angleRelativeTolerance tolerance a b =
-    floatRelativeTolerance tolerance (sin a) (sin b) &&
-    floatRelativeTolerance tolerance (cos a) (cos b)
+    floatRelativeTolerance tolerance (sin a) (sin b)
+        && floatRelativeTolerance tolerance (cos a) (cos b)
+
 
 angleEqual : Float -> Float -> Expectation
 angleEqual =
@@ -73,6 +75,7 @@ angleEqual =
         equateWith
             (renderResult ("angles not within tolerance " ++ toString tolerance))
             (angleRelativeTolerance tolerance)
+
 
 qnComponentRelativeTolerance : Float -> Quaternion -> Quaternion -> Bool
 qnComponentRelativeTolerance tolerance a b =

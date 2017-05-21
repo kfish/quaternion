@@ -8,6 +8,7 @@ import Math.Quaternion as Qn exposing (..)
 import QnExpect as Expect exposing (..)
 import QnFuzz as Fuzz exposing (..)
 
+
 all : Test
 all =
     describe "Quaternion Test Suite"
@@ -15,9 +16,6 @@ all =
             [ test "Unit" <|
                 \() ->
                     qnEqual unit (fromScalar 1)
-            , test "i=7" <|
-                \() ->
-                    floatEqual 7.0 (getI (setI 7 unit))
             ]
         , describe "Getter/setter tests"
             [ fuzz Fuzz.float "(fromScalar >> getScalar) q == q" <|
@@ -26,9 +24,9 @@ all =
                 \f -> (fromScalar >> getScalar) f |> floatEqual f
             , fuzz Fuzz.float "setI f q |> getI == f" <|
                 \f -> (getI (setI 7 unit)) |> floatEqual 7
-            , fuzz Fuzz.float "setJ f q |> getI == f"  <|
+            , fuzz Fuzz.float "setJ f q |> getI == f" <|
                 \f -> (getJ (setJ 7 unit)) |> floatEqual 7
-            , fuzz Fuzz.float "setK f q |> getI == f"  <|
+            , fuzz Fuzz.float "setK f q |> getI == f" <|
                 \f -> (getK (setK 7 unit)) |> floatEqual 7
             ]
         , describe "Identity tests"
@@ -78,34 +76,46 @@ all =
         , describe "Yaw-Pitch-Roll tests"
             [ test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) yaw" <|
                 \() ->
-                    let (yaw, pitch, roll) =
-                            (fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0)
-                    in floatEqual 0 yaw
+                    let
+                        ( yaw, pitch, roll ) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ( 0, 0, 0 )
+                    in
+                        floatEqual 0 yaw
             , test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) pitch" <|
                 \() ->
-                    let (yaw, pitch, roll) =
-                            (fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0)
-                    in floatEqual 0 pitch
+                    let
+                        ( yaw, pitch, roll ) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ( 0, 0, 0 )
+                    in
+                        floatEqual 0 pitch
             , test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) roll" <|
                 \() ->
-                    let (yaw, pitch, roll) =
-                            (fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0)
-                    in floatEqual 0 roll
+                    let
+                        ( yaw, pitch, roll ) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ( 0, 0, 0 )
+                    in
+                        floatEqual 0 roll
             , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) yaw" <|
                 \() ->
-                    let (yaw, pitch, roll) =
-                            (fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4))
-                    in floatEqual (pi/4) yaw
+                    let
+                        ( yaw, pitch, roll ) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ( (pi / 4), (pi / 4), (pi / 4) )
+                    in
+                        floatEqual (pi / 4) yaw
             , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) pitch" <|
                 \() ->
-                    let (yaw, pitch, roll) =
-                            (fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4))
-                    in floatEqual (pi/4) pitch
+                    let
+                        ( yaw, pitch, roll ) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ( (pi / 4), (pi / 4), (pi / 4) )
+                    in
+                        floatEqual (pi / 4) pitch
             , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) roll" <|
                 \() ->
-                    let (yaw, pitch, roll) =
-                            (fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4))
-                    in floatEqual (pi/4) roll
+                    let
+                        ( yaw, pitch, roll ) =
+                            (fromYawPitchRoll >> toYawPitchRoll) ( (pi / 4), (pi / 4), (pi / 4) )
+                    in
+                        floatEqual (pi / 4) roll
             , fuzz Fuzz.yawPitchRoll "(fromYawPitchRoll >> toYawPitchRoll) yaw " <|
                 \( yaw, pitch, roll ) ->
                     let
