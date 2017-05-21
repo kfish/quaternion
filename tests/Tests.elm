@@ -95,21 +95,21 @@ all =
                             [ floatEqual s s_
                             , vec3Equal v v_
                             ]
-            , fuzz Fuzz.floatTuple3 "(fromYawPitchRoll >> toYawPitchRoll) yaw == yaw" <|
+            , fuzz Fuzz.yawPitchRoll "(fromYawPitchRoll >> toYawPitchRoll) yaw " <|
                 \( yaw, pitch, roll ) ->
                     let
                         ( yaw_, pitch_, roll_ ) =
                             (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
                     in
                         angleEqual yaw yaw_
-            , fuzz Fuzz.floatTuple3 "(fromYawPitchRoll >> toYawPitchRoll) pitch == pitch" <|
+            , fuzz Fuzz.yawPitchRoll "(fromYawPitchRoll >> toYawPitchRoll) pitch " <|
                 \( yaw, pitch, roll ) ->
                     let
                         ( yaw_, pitch_, roll_ ) =
                             (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
                     in
                         angleEqual pitch pitch_
-            , fuzz Fuzz.floatTuple3 "(fromYawPitchRoll >> toYawPitchRoll) roll == roll" <|
+            , fuzz Fuzz.yawPitchRoll "(fromYawPitchRoll >> toYawPitchRoll) roll " <|
                 \( yaw, pitch, roll ) ->
                     let
                         ( yaw_, pitch_, roll_ ) =

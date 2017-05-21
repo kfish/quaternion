@@ -275,18 +275,30 @@ toYawPitchRoll q =
 
         q2q2 = q2*q2
 
-        r0 = 2 * (q0*q1 + q2*q3)
-        r1 = 1 - 2*(q1*q1 + q2q2)
-        roll = atan2 r0 r1
+        t = q2q2 + q3*q3
 
-        t2_0 = 2 * (q0*q2 - q3*q1)
-        t2_1 = if t2_0 > 1.0 then 1.0 else t2_0
-        t2 = if t2_1 < -1.0 then -1.0 else t2_1
-        pitch = asin t2
-
-        t3 = 2.0 * (q0*q3 + q1*q2)
-        t4 = 1 - 2.0 * (q2q2 + q3*q3)
-        yaw = atan2 t3 t4
+        (yaw, pitch, roll) =
+            if (t > 0.499) then
+                -- Singularity at north pole
+                (2 * atan2 q1 q0, pi/2, 0)
+            else if (t < -0.499) then
+                -- Singularity at south pole
+                (-2 * atan2 q1 q0, -pi/2, 0)
+            else
+                let
+                    r0 = 2 * (q0*q1 + q2*q3)
+                    r1 = 1 - 2*(q1*q1 + q2q2)
+                    roll_ = atan2 r0 r1
+        
+                    t2_0 = 2 * (q0*q2 - q3*q1)
+                    t2_1 = if t2_0 > 1.0 then 1.0 else t2_0
+                    t2 = if t2_1 < -1.0 then -1.0 else t2_1
+                    pitch_ = asin t2
+        
+                    t3 = 2.0 * (q0*q3 + q1*q2)
+                    t4 = 1 - 2.0 * t
+                    yaw_ = atan2 t3 t4
+                in (yaw_, pitch_, roll_)
 
     in (yaw, pitch, roll)
 
