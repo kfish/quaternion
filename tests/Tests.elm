@@ -37,11 +37,11 @@ testGetterSetter =
         , fuzz Fuzz.float "(fromscalar >> getScalar) q == q" <|
             \f -> (fromScalar >> getScalar) f |> floatEqual f
         , fuzz Fuzz.float "setI f q |> getI == f" <|
-            \f -> (getI (setI 7 unit)) |> floatEqual 7
+            \f -> (getI (setI f unit)) |> floatEqual f
         , fuzz Fuzz.float "setJ f q |> getI == f" <|
-            \f -> (getJ (setJ 7 unit)) |> floatEqual 7
+            \f -> (getJ (setJ f unit)) |> floatEqual f
         , fuzz Fuzz.float "setK f q |> getI == f" <|
-            \f -> (getK (setK 7 unit)) |> floatEqual 7
+            \f -> (getK (setK f unit)) |> floatEqual f
         ]
 
 
