@@ -306,14 +306,8 @@ toYawPitchRoll q =
 toMat4 : Quaternion -> M4.Mat4
 toMat4 q =
     let
-        (phi, tau, psi) = toEuler q
+        (yaw, pitch, roll) = toYawPitchRoll q
     in
-        -- M4.makeRotate (phi+pi) V3.k
-        M4.makeRotate (phi) V3.k
-        |> M4.rotate tau V3.i
-        |> M4.rotate psi V3.j
-{-
-        M4.makeRotate psi V3.j
-        |> M4.rotate tau V3.i
-        |> M4.rotate phi V3.k
--}
+        M4.makeRotate yaw V3.k
+        |> M4.rotate pitch V3.i
+        |> M4.rotate roll V3.j
