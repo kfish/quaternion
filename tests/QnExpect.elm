@@ -26,7 +26,7 @@ all_ es =
 
 floatRelativeTolerance : Float -> Float -> Float -> Bool
 floatRelativeTolerance tolerance a b =
-    if (a == b) then
+    if (a == b || (isNaN a && isNaN b)) then
         True
     else if (abs a < 10 * tolerance) then
         abs (a - b) < (10 * tolerance)
@@ -107,7 +107,7 @@ vec3Equal : Vec3 -> Vec3 -> Expectation
 vec3Equal =
     let
         tolerance =
-            0.00001
+            0.0001
     in
         equateWith
             (renderResult ("Components not within tolerance " ++ toString tolerance))
