@@ -18,6 +18,7 @@ all =
         , testOperators
         , testYawPitchRoll
         , testCayleyGraph
+        , testMultiplication
         ]
 
 
@@ -240,3 +241,13 @@ testCayleyGraph =
                     \() -> Qn.hamilton (Qn.negate i) k |> qnEqual j
                 ]
             ]
+
+
+testMultiplication : Test
+testMultiplication =
+    describe "Multiplication"
+        [ fuzz2 Fuzz.float Fuzz.quaternion "Multiplication by a scalar on the right" <|
+            \f q -> Qn.hamilton q (Qn.fromScalar f) |> qnEqual (Qn.scale f q)
+        , fuzz2 Fuzz.float Fuzz.quaternion "Multiplication by a scalar on the left" <|
+            \f q -> Qn.hamilton (Qn.fromScalar f) q |> qnEqual (Qn.scale f q)
+        ]
