@@ -221,4 +221,22 @@ testCayleyGraph =
                 , test "i * j == k" <|
                     \() -> Qn.hamilton i j |> qnEqual k
                 ]
+            , describe "Multiplication on the right by k"
+                [ test "1 * k == k" <|
+                    \() -> Qn.hamilton unit k |> qnEqual k
+                , test "k * k == -1" <|
+                    \() -> Qn.hamilton k k |> qnEqual (Qn.negate Qn.unit)
+                , test "-1 * k == -k" <|
+                    \() -> Qn.hamilton (Qn.negate Qn.unit) k |> qnEqual (Qn.negate k)
+                , test "-k * k == 1" <|
+                    \() -> Qn.hamilton (Qn.negate k) k |> qnEqual unit
+                , test "j * k == i" <|
+                    \() -> Qn.hamilton j k |> qnEqual i
+                , test "i * k == -j" <|
+                    \() -> Qn.hamilton i k |> qnEqual (Qn.negate j)
+                , test "-j * k == -i" <|
+                    \() -> Qn.hamilton (Qn.negate j) k |> qnEqual (Qn.negate i)
+                , test "-i * k == j" <|
+                    \() -> Qn.hamilton (Qn.negate i) k |> qnEqual j
+                ]
             ]
