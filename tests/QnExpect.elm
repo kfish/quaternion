@@ -107,7 +107,7 @@ vec3Equal : Vec3 -> Vec3 -> Expectation
 vec3Equal =
     let
         tolerance =
-            0.0000001
+            0.00001
     in
         equateWith
             (renderResult ("Components not within tolerance " ++ toString tolerance))

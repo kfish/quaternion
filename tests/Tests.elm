@@ -4,6 +4,7 @@ import Test exposing (..)
 import Expect
 import Fuzz
 import String
+import Math.Matrix4 as M4
 import Math.Vector3 as V3
 import Math.Quaternion as Qn exposing (..)
 import QnExpect as Expect exposing (..)
@@ -21,6 +22,7 @@ all =
         , testCayleyGraph
         , testMultiplication
         , testAngleAxis
+        , testRotation
         ]
 
 
@@ -275,3 +277,13 @@ testAngleAxis =
             , fuzz Fuzz.float "Roll is rotation about the x axis" <|
                 \f -> Qn.fromAngleAxis f V3.i |> qnEqual (Qn.fromYawPitchRoll ( 0, 0, f ))
             ]
+
+
+testRotation : Test
+testRotation =
+    describe "Rotation tests"
+        [ fuzz3 Fuzz.float Fuzz.vec3 Fuzz.vec3 "Vector rotation via Angle Axis" <|
+            \angle axis v ->
+                Qn.vrotate (Qn.fromAngleAxis angle (V3.normalize axis)) v
+                    |> vec3Equal (M4.transform (M4.makeRotate angle axis) v)
+        ]
