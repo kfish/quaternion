@@ -4,6 +4,7 @@ import Test exposing (..)
 import Expect
 import Fuzz
 import String
+import Math.Vector3 as V3
 import Math.Quaternion as Qn exposing (..)
 import QnExpect as Expect exposing (..)
 import QnFuzz as Fuzz exposing (..)
@@ -19,6 +20,7 @@ all =
         , testYawPitchRoll
         , testCayleyGraph
         , testMultiplication
+        , testAngleAxis
         ]
 
 
@@ -245,9 +247,31 @@ testCayleyGraph =
 
 testMultiplication : Test
 testMultiplication =
-    describe "Multiplication"
+    describe "Multiplication tests"
         [ fuzz2 Fuzz.float Fuzz.quaternion "Multiplication by a scalar on the right" <|
             \f q -> Qn.hamilton q (Qn.fromScalar f) |> qnEqual (Qn.scale f q)
         , fuzz2 Fuzz.float Fuzz.quaternion "Multiplication by a scalar on the left" <|
             \f q -> Qn.hamilton (Qn.fromScalar f) q |> qnEqual (Qn.scale f q)
         ]
+
+
+testAngleAxis : Test
+testAngleAxis =
+    let
+        i =
+            Qn.quaternion 0 1 0 0
+
+        j =
+            Qn.quaternion 0 0 1 0
+
+        k =
+            Qn.quaternion 0 0 0 1
+    in
+        describe "Angle Axis representation"
+            [ fuzz Fuzz.float "Yaw is rotation about the z axis" <|
+                \f -> Qn.fromAngleAxis f V3.k |> qnEqual (Qn.fromYawPitchRoll ( f, 0, 0 ))
+            , fuzz Fuzz.float "Pitch is rotation about the y axis" <|
+                \f -> Qn.fromAngleAxis f V3.j |> qnEqual (Qn.fromYawPitchRoll ( 0, f, 0 ))
+            , fuzz Fuzz.float "Roll is rotation about the x axis" <|
+                \f -> Qn.fromAngleAxis f V3.i |> qnEqual (Qn.fromYawPitchRoll ( 0, 0, f ))
+            ]
