@@ -23,7 +23,7 @@ Also, quaternions are faster than matrices due to 4 components not 9.
 @docs Quaternion
 
 # Create
-@docs unit, quaternion, fromAngleAxis, fromEuler, fromRecord, fromSV, fromScalar, fromTo, fromTo2, fromTuple, fromVec3, orient, fromYawPitchRoll, toYawPitchRoll
+@docs unit, quaternion, fromAngleAxis, fromRecord, fromSV, fromScalar, fromTo, fromTo2, fromTuple, fromVec3, orient, fromYawPitchRoll, toYawPitchRoll
 
 # Get and Set
 @docs getI, getJ, getK, getScalar, getAngle, getAxis, setI, setJ, setK, setScalar
@@ -33,7 +33,7 @@ Also, quaternions are faster than matrices due to 4 components not 9.
 
 
 # Conversions
-@docs toEuler, toMat4, toRecord, toSV, toTuple, toVec3
+@docs toMat4, toRecord, toSV, toTuple, toVec3
 
 -}
 
