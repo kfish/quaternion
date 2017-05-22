@@ -17,6 +17,7 @@ all =
         , testIdentity
         , testOperators
         , testYawPitchRoll
+        , testCayleyGraph
         ]
 
 
@@ -164,3 +165,54 @@ testYawPitchRoll =
                 in
                     angleEqual roll roll_
         ]
+
+
+{-| Test the multiplication of basis vectors
+ - <https://en.wikipedia.org/wiki/Quaternion#Algebraic_properties>
+-}
+testCayleyGraph : Test
+testCayleyGraph =
+    let
+        i =
+            Qn.quaternion 0 1 0 0
+
+        j =
+            Qn.quaternion 0 0 1 0
+
+        k =
+            Qn.quaternion 0 0 0 1
+    in
+        describe "Cayley graph of Q(8)"
+            [ test "1 * i == i" <|
+                \() -> Qn.hamilton unit i |> qnEqual i
+            , test "i * i == -1" <|
+                \() -> Qn.hamilton i i |> qnEqual (Qn.negate Qn.unit)
+            , test "-1 * i == -i" <|
+                \() -> Qn.hamilton (Qn.negate Qn.unit) i |> qnEqual (Qn.negate i)
+            , test "-i * i == 1" <|
+                \() -> Qn.hamilton (Qn.negate i) i |> qnEqual unit
+            , test "k * i == j" <|
+                \() -> Qn.hamilton k i |> qnEqual j
+            , test "j * i == -k" <|
+                \() -> Qn.hamilton j i |> qnEqual (Qn.negate k)
+            , test "-k * i == -j" <|
+                \() -> Qn.hamilton (Qn.negate k) i |> qnEqual (Qn.negate j)
+            , test "-j * i == k" <|
+                \() -> Qn.hamilton (Qn.negate j) i |> qnEqual k
+            , test "1 * j == j" <|
+                \() -> Qn.hamilton unit j |> qnEqual j
+            , test "j * j == -1" <|
+                \() -> Qn.hamilton j j |> qnEqual (Qn.negate Qn.unit)
+            , test "-1 * j == -j" <|
+                \() -> Qn.hamilton (Qn.negate Qn.unit) j |> qnEqual (Qn.negate j)
+            , test "-j * j == 1" <|
+                \() -> Qn.hamilton (Qn.negate j) j |> qnEqual unit
+            , test "k * j == -i" <|
+                \() -> Qn.hamilton k j |> qnEqual (Qn.negate i)
+            , test "-i * j == -k" <|
+                \() -> Qn.hamilton (Qn.negate i) j |> qnEqual (Qn.negate k)
+            , test "-k * j == i" <|
+                \() -> Qn.hamilton (Qn.negate k) j |> qnEqual i
+            , test "i * j == k" <|
+                \() -> Qn.hamilton i j |> qnEqual k
+            ]
