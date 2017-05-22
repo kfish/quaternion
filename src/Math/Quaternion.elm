@@ -245,7 +245,7 @@ fromAngleAxis twoTheta v =
         s = sin theta
     in vec4 c (x*s) (y*s) (z*s)
 
-{-| Construction from Tait-Bryan angles representing
+{-| Construction a unit quaternion from Tait-Bryan angles representing
 (yaw, pitch, roll)
 
 https://en.wikipedia.org/wiki/Euler_angles#Tait.E2.80.93Bryan_angles
@@ -267,7 +267,9 @@ fromYawPitchRoll (yaw, pitch, roll) =
 
   in quaternion q0 q1 q2 q3
 
-{-| Convert to Yaw, Pitch, Roll -}
+{-| Convert a unit quaternion to Yaw, Pitch, Roll
+http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/index.htm
+-}
 toYawPitchRoll : Quaternion -> (Float, Float, Float)
 toYawPitchRoll q =
     let 
