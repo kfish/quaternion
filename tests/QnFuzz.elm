@@ -23,6 +23,7 @@ quaternion : Fuzzer Quaternion
 quaternion =
     Fuzz.map4 Qn.quaternion float float float float
 
+
 nonZeroQuaternion : Fuzzer Quaternion
 nonZeroQuaternion =
     conditional
@@ -32,17 +33,21 @@ nonZeroQuaternion =
         }
         quaternion
 
+
 unitQuaternion : Fuzzer Quaternion
 unitQuaternion =
     Fuzz.map Qn.normalize nonZeroQuaternion
 
 
 angle : Fuzzer Float
-angle = Fuzz.floatRange 1e-7 (2.0 * pi)
+angle =
+    Fuzz.floatRange 1.0e-7 (2.0 * pi)
+
 
 vec3 : Fuzzer Vec3
 vec3 =
     Fuzz.map3 V3.vec3 float float float
+
 
 unitVec3 : Fuzzer Vec3
 unitVec3 =

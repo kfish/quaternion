@@ -97,9 +97,15 @@ testIdentity =
         , fuzz2 Fuzz.angle Fuzz.unitVec3 "(fromAngleAxis >> getAxis)" <|
             \angle axis -> fromAngleAxis angle axis |> getAxis |> vec3Equal axis
         , fuzz Fuzz.unitQuaternion "(toAngleAxis >> fromAngleAxis) q == q" <|
-            \q -> let angle = getAngle q
-                      axis = getAxis q
-                  in fromAngleAxis angle axis |> qnEqual q
+            \q ->
+                let
+                    angle =
+                        getAngle q
+
+                    axis =
+                        getAxis q
+                in
+                    fromAngleAxis angle axis |> qnEqual q
         ]
 
 
