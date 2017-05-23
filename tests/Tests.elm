@@ -18,11 +18,11 @@ all =
         , testGetterSetter
         , testIdentity
         , testOperators
-        , testYawPitchRoll
-        , testCayleyGraph
         , testMultiplication
-        , testAngleAxisYawPitchRoll
+        , testCayleyGraph
         , testRotation
+        , testYawPitchRoll
+        , testAngleAxisYawPitchRoll
         ]
 
 
@@ -119,72 +119,13 @@ testOperators =
         ]
 
 
-testYawPitchRoll : Test
-testYawPitchRoll =
-    describe "Yaw-Pitch-Roll tests"
-        [ test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) yaw" <|
-            \() ->
-                let
-                    ( yaw, pitch, roll ) =
-                        (fromYawPitchRoll >> toYawPitchRoll) ( 0, 0, 0 )
-                in
-                    floatEqual 0 yaw
-        , test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) pitch" <|
-            \() ->
-                let
-                    ( yaw, pitch, roll ) =
-                        (fromYawPitchRoll >> toYawPitchRoll) ( 0, 0, 0 )
-                in
-                    floatEqual 0 pitch
-        , test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) roll" <|
-            \() ->
-                let
-                    ( yaw, pitch, roll ) =
-                        (fromYawPitchRoll >> toYawPitchRoll) ( 0, 0, 0 )
-                in
-                    floatEqual 0 roll
-        , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) yaw" <|
-            \() ->
-                let
-                    ( yaw, pitch, roll ) =
-                        (fromYawPitchRoll >> toYawPitchRoll) ( (pi / 4), (pi / 4), (pi / 4) )
-                in
-                    floatEqual (pi / 4) yaw
-        , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) pitch" <|
-            \() ->
-                let
-                    ( yaw, pitch, roll ) =
-                        (fromYawPitchRoll >> toYawPitchRoll) ( (pi / 4), (pi / 4), (pi / 4) )
-                in
-                    floatEqual (pi / 4) pitch
-        , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) roll" <|
-            \() ->
-                let
-                    ( yaw, pitch, roll ) =
-                        (fromYawPitchRoll >> toYawPitchRoll) ( (pi / 4), (pi / 4), (pi / 4) )
-                in
-                    floatEqual (pi / 4) roll
-        , fuzz Fuzz.yawPitchRoll "(fromYawPitchRoll >> toYawPitchRoll) yaw " <|
-            \( yaw, pitch, roll ) ->
-                let
-                    ( yaw_, pitch_, roll_ ) =
-                        (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
-                in
-                    angleEqual yaw yaw_
-        , fuzz Fuzz.yawPitchRoll "(fromYawPitchRoll >> toYawPitchRoll) pitch " <|
-            \( yaw, pitch, roll ) ->
-                let
-                    ( yaw_, pitch_, roll_ ) =
-                        (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
-                in
-                    angleEqual pitch pitch_
-        , fuzz Fuzz.yawPitchRoll "(fromYawPitchRoll >> toYawPitchRoll) roll " <|
-            \( yaw, pitch, roll ) ->
-                let
-                    ( yaw_, pitch_, roll_ ) =
-                        (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
-                in
-                    angleEqual roll roll_
+testMultiplication : Test
+testMultiplication =
+    describe "Multiplication tests"
+        [ fuzz2 Fuzz.float Fuzz.quaternion "Multiplication by a scalar on the right" <|
+            \f q -> Qn.hamilton q (Qn.fromScalar f) |> qnEqual (Qn.scale f q)
+        , fuzz2 Fuzz.float Fuzz.quaternion "Multiplication by a scalar on the left" <|
+            \f q -> Qn.hamilton (Qn.fromScalar f) q |> qnEqual (Qn.scale f q)
         ]
 
 
@@ -263,13 +204,82 @@ testCayleyGraph =
             ]
 
 
-testMultiplication : Test
-testMultiplication =
-    describe "Multiplication tests"
-        [ fuzz2 Fuzz.float Fuzz.quaternion "Multiplication by a scalar on the right" <|
-            \f q -> Qn.hamilton q (Qn.fromScalar f) |> qnEqual (Qn.scale f q)
-        , fuzz2 Fuzz.float Fuzz.quaternion "Multiplication by a scalar on the left" <|
-            \f q -> Qn.hamilton (Qn.fromScalar f) q |> qnEqual (Qn.scale f q)
+testRotation : Test
+testRotation =
+    describe "Rotation tests"
+        [ fuzz3 Fuzz.float Fuzz.vec3 Fuzz.vec3 "Vector rotation via Angle Axis" <|
+            \angle axis v ->
+                Qn.vrotate (Qn.fromAngleAxis angle (V3.normalize axis)) v
+                    |> vec3Equal (M4.transform (M4.makeRotate angle axis) v)
+        ]
+
+
+testYawPitchRoll : Test
+testYawPitchRoll =
+    describe "Yaw-Pitch-Roll tests"
+        [ test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) yaw" <|
+            \() ->
+                let
+                    ( yaw, pitch, roll ) =
+                        (fromYawPitchRoll >> toYawPitchRoll) ( 0, 0, 0 )
+                in
+                    floatEqual 0 yaw
+        , test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) pitch" <|
+            \() ->
+                let
+                    ( yaw, pitch, roll ) =
+                        (fromYawPitchRoll >> toYawPitchRoll) ( 0, 0, 0 )
+                in
+                    floatEqual 0 pitch
+        , test "(fromYawPitchRoll >> toYawPitchRoll) (0, 0, 0) roll" <|
+            \() ->
+                let
+                    ( yaw, pitch, roll ) =
+                        (fromYawPitchRoll >> toYawPitchRoll) ( 0, 0, 0 )
+                in
+                    floatEqual 0 roll
+        , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) yaw" <|
+            \() ->
+                let
+                    ( yaw, pitch, roll ) =
+                        (fromYawPitchRoll >> toYawPitchRoll) ( (pi / 4), (pi / 4), (pi / 4) )
+                in
+                    floatEqual (pi / 4) yaw
+        , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) pitch" <|
+            \() ->
+                let
+                    ( yaw, pitch, roll ) =
+                        (fromYawPitchRoll >> toYawPitchRoll) ( (pi / 4), (pi / 4), (pi / 4) )
+                in
+                    floatEqual (pi / 4) pitch
+        , test "(fromYawPitchRoll >> toYawPitchRoll) ((pi/4), (pi/4), (pi/4)) roll" <|
+            \() ->
+                let
+                    ( yaw, pitch, roll ) =
+                        (fromYawPitchRoll >> toYawPitchRoll) ( (pi / 4), (pi / 4), (pi / 4) )
+                in
+                    floatEqual (pi / 4) roll
+        , fuzz Fuzz.yawPitchRoll "(fromYawPitchRoll >> toYawPitchRoll) yaw " <|
+            \( yaw, pitch, roll ) ->
+                let
+                    ( yaw_, pitch_, roll_ ) =
+                        (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
+                in
+                    angleEqual yaw yaw_
+        , fuzz Fuzz.yawPitchRoll "(fromYawPitchRoll >> toYawPitchRoll) pitch " <|
+            \( yaw, pitch, roll ) ->
+                let
+                    ( yaw_, pitch_, roll_ ) =
+                        (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
+                in
+                    angleEqual pitch pitch_
+        , fuzz Fuzz.yawPitchRoll "(fromYawPitchRoll >> toYawPitchRoll) roll " <|
+            \( yaw, pitch, roll ) ->
+                let
+                    ( yaw_, pitch_, roll_ ) =
+                        (fromYawPitchRoll >> toYawPitchRoll) ( yaw, pitch, roll )
+                in
+                    angleEqual roll roll_
         ]
 
 
@@ -293,13 +303,3 @@ testAngleAxisYawPitchRoll =
             , fuzz Fuzz.float "Roll is rotation about the x axis" <|
                 \f -> Qn.fromAngleAxis f V3.i |> qnEqual (Qn.fromYawPitchRoll ( 0, 0, f ))
             ]
-
-
-testRotation : Test
-testRotation =
-    describe "Rotation tests"
-        [ fuzz3 Fuzz.float Fuzz.vec3 Fuzz.vec3 "Vector rotation via Angle Axis" <|
-            \angle axis v ->
-                Qn.vrotate (Qn.fromAngleAxis angle (V3.normalize axis)) v
-                    |> vec3Equal (M4.transform (M4.makeRotate angle axis) v)
-        ]
