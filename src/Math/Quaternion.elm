@@ -19,6 +19,14 @@ Impossible transforms are inexpressible
 
 Also, quaternions are faster than matrices due to 4 components not 9.
 
+# API Design
+
+This API is designed for efficiency: input ranges are documented, but
+input values are not sanitized. For example, most rotation operations
+require unit quaternions and unit axis vectors. Rather than normalizing
+all inputs, which would add sqrt calls to all functions, the expected
+values are documented.
+
 # Types
 @docs Quaternion
 
@@ -238,11 +246,13 @@ vrotate : Quaternion -> Vec3 -> Vec3
 -- vrotate q v = toVec3 <| hamilton q (vmult v (conjugate q))
 vrotate q v = toVec3 <| hamilton q (hamilton (fromSV (0, v)) (conjugate q))
 
-{-| Construction of a right quaternion -}
+{-| Construction from angle, axis.
+This will create a unit quaternion if given a unit vector.
+-}
 fromAngleAxis : Float -> Vec3 -> Quaternion
-fromAngleAxis twoTheta v =
-    let {x,y,z} = V3.toRecord v
-        theta = twoTheta / 2.0
+fromAngleAxis angle axis =
+    let {x,y,z} = V3.toRecord axis
+        theta = angle / 2.0
         c = cos theta
         s = sin theta
     in vec4 c (x*s) (y*s) (z*s)
