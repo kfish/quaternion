@@ -240,7 +240,7 @@ vrotate q v = toVec3 <| hamilton q (hamilton (fromSV (0, v)) (conjugate q))
 fromAngleAxis : Float -> Vec3 -> Quaternion
 fromAngleAxis twoTheta v =
     let {x,y,z} = V3.toRecord v
-        theta = twoTheta / 2
+        theta = twoTheta / 2.0
         c = cos theta
         s = sin theta
     in vec4 c (x*s) (y*s) (z*s)

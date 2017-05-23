@@ -89,7 +89,7 @@ qnEqual : Quaternion -> Quaternion -> Expectation
 qnEqual =
     let
         tolerance =
-            0.000001
+            0.0001
     in
         equateWith
             (renderResult ("Components not within tolerance " ++ toString tolerance))

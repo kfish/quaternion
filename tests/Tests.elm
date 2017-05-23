@@ -92,6 +92,14 @@ testIdentity =
             \q -> (Qn.negate >> Qn.negate) q |> qnEqual q
         , fuzz Fuzz.vec3 "(fromVec3 >> toVec3) v == v" <|
             \v -> (fromVec3 >> toVec3) v |> vec3Equal v
+        , fuzz2 Fuzz.angle Fuzz.unitVec3 "(fromAngleAxis >> getAngle)" <|
+            \angle axis -> fromAngleAxis angle axis |> getAngle |> floatEqual angle
+        , fuzz2 Fuzz.angle Fuzz.unitVec3 "(fromAngleAxis >> getAxis)" <|
+            \angle axis -> fromAngleAxis angle axis |> getAxis |> vec3Equal axis
+        , fuzz Fuzz.unitQuaternion "(toAngleAxis >> fromAngleAxis) q == q" <|
+            \q -> let angle = getAngle q
+                      axis = getAxis q
+                  in fromAngleAxis angle axis |> qnEqual q
         ]
 
 
