@@ -43,6 +43,12 @@ values are documented.
 # Conversions
 @docs toMat4, toRecord, toSV, toTuple, toVec3
 
+# Co-ordinate systems
+Rigid Body Dynamics, Inertial Reference Frames,
+and Graphics Coordinate Systems:
+A Resolution of Conflicting Conventions and Terminology
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.58.99&rep=rep1&type=pdf
+
 -}
 
 import Math.Matrix4 as M4
