@@ -1,6 +1,7 @@
 module QnFuzz
     exposing
         ( quaternion
+        , nonZeroQuaternion
         , vec3
         , floatTuple3
         , floatTuple4
@@ -18,6 +19,15 @@ import Math.Vector3 as V3 exposing (Vec3)
 quaternion : Fuzzer Quaternion
 quaternion =
     Fuzz.map4 Qn.quaternion float float float float
+
+nonZeroQuaternion : Fuzzer Quaternion
+nonZeroQuaternion =
+    conditional
+        { retries = 10
+        , fallback = always Qn.unit
+        , condition = \q -> q /= Qn.quaternion 0 0 0 0
+        }
+        quaternion
 
 
 vec3 : Fuzzer Vec3

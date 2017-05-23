@@ -98,7 +98,7 @@ testIdentity =
 testOperators : Test
 testOperators =
     describe "Operator tests"
-        [ fuzz Fuzz.quaternion "(normalize >> length) q == 1" <|
+        [ fuzz Fuzz.nonZeroQuaternion "(normalize >> length) q == 1" <|
             \q -> (normalize >> length) q |> floatEqual 1.0
         , fuzz Fuzz.quaternion "lengthSquared q == (length q * length q)" <|
             \q -> length q * length q |> floatEqual (lengthSquared q)
