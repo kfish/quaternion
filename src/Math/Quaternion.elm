@@ -193,7 +193,9 @@ orient : Vec3 -> Quaternion
 orient v = normalize (fromVec3 v)
 -- orient v = normalize (conjugate (fromVec3 v))
 
-{-| Angle of rotation -}
+{-| Angle of rotation.
+Returns angle in radians, in the range [0, 2*pi)
+-}
 getAngle : Quaternion -> Float
 getAngle q = 2.0 * acos (getScalar q)
 
