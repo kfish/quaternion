@@ -89,8 +89,6 @@ testIdentity =
                         [ floatEqual s s_
                         , vec3Equal v v_
                         ]
-        , fuzz Fuzz.quaternion "(negate >> negate) q == q" <|
-            \q -> (Qn.negate >> Qn.negate) q |> qnEqual q
         , fuzz Fuzz.vec3 "(fromVec3 >> toVec3) v == v" <|
             \v -> (fromVec3 >> toVec3) v |> vec3Equal v
         ]
@@ -119,7 +117,9 @@ testAngleAxis =
 testOperators : Test
 testOperators =
     describe "Operator tests"
-        [ fuzz Fuzz.nonZeroQuaternion "(normalize >> length) q == 1" <|
+        [ fuzz Fuzz.quaternion "(negate >> negate) q == q" <|
+            \q -> (Qn.negate >> Qn.negate) q |> qnEqual q
+        , fuzz Fuzz.nonZeroQuaternion "(normalize >> length) q == 1" <|
             \q -> (normalize >> length) q |> floatEqual 1.0
         , fuzz Fuzz.quaternion "lengthSquared q == (length q * length q)" <|
             \q -> length q * length q |> floatEqual (lengthSquared q)
