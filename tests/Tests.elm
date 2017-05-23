@@ -21,7 +21,7 @@ all =
         , testYawPitchRoll
         , testCayleyGraph
         , testMultiplication
-        , testAngleAxis
+        , testAngleAxisYawPitchRoll
         , testRotation
         ]
 
@@ -259,8 +259,8 @@ testMultiplication =
         ]
 
 
-testAngleAxis : Test
-testAngleAxis =
+testAngleAxisYawPitchRoll : Test
+testAngleAxisYawPitchRoll =
     let
         i =
             Qn.quaternion 0 1 0 0
