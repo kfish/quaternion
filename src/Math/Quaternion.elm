@@ -31,17 +31,22 @@ values are documented.
 @docs Quaternion
 
 # Create
-@docs unit, quaternion, fromAngleAxis, fromRecord, fromScalarVector, fromScalar, fromTo, fromTo2, fromTuple, fromVec3, orient, fromYawPitchRoll, toYawPitchRoll
+@docs unit, quaternion, fromRecord, fromTuple, fromScalar, fromVec3, fromScalarVector, orient, fromTo, fromTo2
 
 # Get and Set
-@docs getI, getJ, getK, getScalar, getAngle, getAxis, setI, setJ, setK, setScalar
+@docs getI, getJ, getK, getScalar, setI, setJ, setK, setScalar
 
 # Operations
 @docs length, lengthSquared, normalize, negate, scale, add, sub, conjugate, hamilton, vmult, vrotate, multv, rotate
 
+# Angle-Axis representation
+@docs fromAngleAxis, getAngle, getAxis
+
+# Yaw-Pitch-Roll
+@docs fromYawPitchRoll, toYawPitchRoll
 
 # Conversions
-@docs toMat4, toRecord, toScalarVector, toTuple, toVec3
+@docs toRecord, toTuple, toScalarVector, toVec3, toMat4
 
 # Co-ordinate systems
 Rigid Body Dynamics, Inertial Reference Frames,
