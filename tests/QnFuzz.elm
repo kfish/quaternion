@@ -3,6 +3,7 @@ module QnFuzz
         ( quaternion
         , unitQuaternion
         , nonZeroQuaternion
+        , rotationQuaternion
         , angle
         , vec3
         , unitVec3
@@ -37,6 +38,25 @@ nonZeroQuaternion =
 unitQuaternion : Fuzzer Quaternion
 unitQuaternion =
     Fuzz.map Qn.normalize nonZeroQuaternion
+
+
+qnNotVertical : Quaternion -> Bool
+qnNotVertical q =
+    let
+        ( q0, q1, q2, q3 ) =
+            Qn.toTuple q
+    in
+        (abs (q2 * q2 + q3 * q3) <= 0.499)
+
+
+rotationQuaternion : Fuzzer Quaternion
+rotationQuaternion =
+    conditional
+        { retries = 10
+        , fallback = always Qn.unit
+        , condition = qnNotVertical
+        }
+        unitQuaternion
 
 
 angle : Fuzzer Float

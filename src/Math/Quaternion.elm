@@ -322,15 +322,12 @@ toYawPitchRoll q =
 
     in (yaw, pitch, roll)
 
-{-| Convert to a Mat4, converting to OpenGL coordinate system -}
+{-| Convert to a Mat4 -}
 toMat4 : Quaternion -> M4.Mat4
 toMat4 q =
     let
         (yaw, pitch, roll) = toYawPitchRoll q
-
-        fromFlightDynamics = M4.makeBasis (V3.negate V3.k) V3.i (V3.negate V3.j)
     in
         M4.makeRotate yaw V3.k
         |> M4.rotate pitch V3.j
         |> M4.rotate roll V3.i
-        |> M4.mul fromFlightDynamics

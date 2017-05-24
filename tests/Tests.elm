@@ -312,13 +312,10 @@ testAngleAxisYawPitchRoll =
                 \f -> Qn.fromAngleAxis f V3.i |> qnEqual (Qn.fromYawPitchRoll ( 0, 0, f ))
             ]
 
+
 testMatrix4Conversion : Test
 testMatrix4Conversion =
-      let expect q v = M4.transform (Qn.toMat4 q) v |> vec3Equal (Qn.vrotate q v)
-      in describe "Conversion to Matrix4"
-          [ test "Conversion of known Quaternion to Matrix4" <|
-              \() -> expect (Qn.normalize <| Qn.quaternion 1 2 3 4) (V3.normalize <| V3.vec3 1 1 1)
-          -- , fuzz2 Fuzz.unitQuaternion Fuzz.unitVec3 "foo" <|
-          --   \q v -> M4.transform (Qn.toMat4 q) v |> vec3Equal (Qn.vrotate q v)
-          ]
-
+    describe "Conversion to Matrix4"
+        [ fuzz2 Fuzz.rotationQuaternion Fuzz.unitVec3 "(toMat4 >> transform) == vrotate" <|
+            \q v -> M4.transform (Qn.toMat4 q) v |> vec3Equal (Qn.vrotate q v)
+        ]
