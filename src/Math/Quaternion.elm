@@ -34,7 +34,7 @@ values are documented.
 @docs unit, quaternion, fromRecord, fromTuple, fromScalar, fromVec3, fromScalarVector, orient, fromTo, fromTo2
 
 # Get and Set
-@docs getI, getJ, getK, getScalar, setI, setJ, setK, setScalar
+@docs getScalar, getI, getJ, getK, setScalar, setI, setJ, setK
 
 # Operations
 @docs length, lengthSquared, normalize, negate, scale, add, sub, conjugate, hamilton, vmult, vrotate, multv, rotate
@@ -71,6 +71,14 @@ quaternion = V4.vec4
 unit : Quaternion
 unit = vec4 1 0 0 0
 
+{-| Convert a record to a quaternion. -}
+fromRecord : { s:Float, i:Float, j:Float, k:Float } -> Quaternion
+fromRecord {s,i,j,k} = quaternion s i j k
+
+{-| Convert a tuple to a quaternion. -}
+fromTuple : (Float,Float,Float,Float) -> Quaternion
+fromTuple = V4.fromTuple
+
 {-| Construction of a scalar quaternion -}
 fromScalar : Float -> Quaternion
 fromScalar s = vec4 s 0 0 0
@@ -80,6 +88,16 @@ fromVec3 : Vec3 -> Quaternion
 fromVec3 v =
     let {x,y,z} = V3.toRecord v
     in vec4 0 x y z
+
+{-| Construct a quaternion from an orientation vector -}
+orient : Vec3 -> Quaternion
+orient v = normalize (fromVec3 v)
+
+{-| Construct a Quaternion from its representation as a scalar and a vector -}
+fromScalarVector : (Float, Vec3) -> Quaternion
+fromScalarVector (s,v) =
+    let {x,y,z} = V3.toRecord v
+    in quaternion s x y z
 
 {-| Extract the scalar component of a quaternion. -}
 getScalar : Quaternion -> Float
@@ -113,23 +131,15 @@ setJ = V4.setZ
 setK : Float -> Quaternion -> Quaternion
 setK = V4.setW
 
-{-| Convert a quaternion to a tuple. -}
-toTuple : Quaternion -> (Float,Float,Float,Float)
-toTuple = V4.toTuple
-
-{-| Convert a tuple to a quaternion. -}
-fromTuple : (Float,Float,Float,Float) -> Quaternion
-fromTuple = V4.fromTuple
-
 {-| Convert a quaternion to a record. -}
 toRecord : Quaternion -> { s:Float, i:Float, j:Float, k:Float }
 toRecord q =
     let {x,y,z,w} = V4.toRecord q
     in { s=x, i=y, j=z, k=w }
 
-{-| Convert a record to a quaternion. -}
-fromRecord : { s:Float, i:Float, j:Float, k:Float } -> Quaternion
-fromRecord {s,i,j,k} = quaternion s i j k
+{-| Convert a quaternion to a tuple. -}
+toTuple : Quaternion -> (Float,Float,Float,Float)
+toTuple = V4.toTuple
 
 {-| Convert a quaternion to a tuple of (scalar, vector) -}
 toScalarVector : Quaternion -> (Float, Vec3)
@@ -137,23 +147,9 @@ toScalarVector q =
     let {x,y,z,w} = V4.toRecord q
     in (x, vec3 y z w)
 
-{-| Construct a Quaternion from its representation as a scalar and a vector -}
-fromScalarVector : (Float, Vec3) -> Quaternion
-fromScalarVector (s,v) =
-    let {x,y,z} = V3.toRecord v
-    in quaternion s x y z
-
-{-| Quaternion addition: a + b -}
-add : Quaternion -> Quaternion -> Quaternion
-add = V4.add
-
-{-| Quaternion subtraction: a - b -}
-sub : Quaternion -> Quaternion -> Quaternion
-sub = V4.sub
-
-{-| Quaternion negation: -a -}
-negate : Quaternion -> Quaternion
-negate = V4.negate
+{-| Extract the axis of rotation -}
+toVec3 : Quaternion -> Vec3
+toVec3 q = let {x,y,z,w} = V4.toRecord q in vec3 y z w
 
 {-| The length of the given quaternion: |a| -}
 length : Quaternion -> Float
@@ -167,13 +163,21 @@ lengthSquared = V4.lengthSquared
 normalize : Quaternion -> Quaternion
 normalize = V4.normalize
 
+{-| Quaternion negation: -a -}
+negate : Quaternion -> Quaternion
+negate = V4.negate
+
 {-| Multiply the quaternion by a scalar: s * q -}
 scale : Float -> Quaternion -> Quaternion
 scale = V4.scale
 
-{-| Extract the axis of rotation -}
-toVec3 : Quaternion -> Vec3
-toVec3 q = let {x,y,z,w} = V4.toRecord q in vec3 y z w
+{-| Quaternion addition: a + b -}
+add : Quaternion -> Quaternion -> Quaternion
+add = V4.add
+
+{-| Quaternion subtraction: a - b -}
+sub : Quaternion -> Quaternion -> Quaternion
+sub = V4.sub
 
 {-| Quaternion conjugate -}
 conjugate : Quaternion -> Quaternion
@@ -207,20 +211,13 @@ multv q v = hamilton q (fromVec3 v)
 vmult : Vec3 -> Quaternion -> Quaternion
 vmult v q = hamilton (fromVec3 v) q
 
-{-| Construct a quaternion from an orientation vector -}
-orient : Vec3 -> Quaternion
-orient v = normalize (fromVec3 v)
--- orient v = normalize (conjugate (fromVec3 v))
+{-| Rotate quaternion q1 by quaternion q2 -}
+rotate : Quaternion -> Quaternion -> Quaternion
+rotate q1 q2 = hamilton q1 (hamilton q2 (conjugate q1))
 
-{-| Angle of rotation.
-Returns angle in radians, in the range [0, 2*pi)
--}
-getAngle : Quaternion -> Float
-getAngle q = 2.0 * acos (getScalar q)
-
-{-| Unit vector along the axis of rotation -}
-getAxis : Quaternion -> Vec3
-getAxis q = V3.normalize (toVec3 q)
+{-| Rotate a vector v by the unit quaternion q -}
+vrotate : Quaternion -> Vec3 -> Vec3
+vrotate q v = toVec3 <| hamilton q (hamilton (fromVec3 v) (conjugate q))
 
 {-| Quaternion from two vectors -}
 fromTo : Vec3 -> Vec3 -> Quaternion
@@ -247,14 +244,6 @@ fromTo2 u v =
 
     in normalize <| fromScalarVector (real_part, w)
 
-{-| Rotate quaternion q1 by quaternion q2 -}
-rotate : Quaternion -> Quaternion -> Quaternion
-rotate q1 q2 = hamilton q1 (hamilton q2 (conjugate q1))
-
-{-| Rotate a vector v by the unit quaternion q -}
-vrotate : Quaternion -> Vec3 -> Vec3
-vrotate q v = toVec3 <| hamilton q (hamilton (fromVec3 v) (conjugate q))
-
 {-| Construction from angle, axis.
 This will create a unit quaternion if given a unit vector.
 -}
@@ -265,6 +254,16 @@ fromAngleAxis angle axis =
         c = cos theta
         s = sin theta
     in vec4 c (x*s) (y*s) (z*s)
+
+{-| Angle of rotation.
+Returns angle in radians, in the range [0, 2*pi)
+-}
+getAngle : Quaternion -> Float
+getAngle q = 2.0 * acos (getScalar q)
+
+{-| Unit vector along the axis of rotation -}
+getAxis : Quaternion -> Vec3
+getAxis q = V3.normalize (toVec3 q)
 
 {-| Construction a unit quaternion from Tait-Bryan angles representing
 (yaw, pitch, roll)
