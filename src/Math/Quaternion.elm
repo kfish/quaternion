@@ -248,9 +248,7 @@ rotate q1 q2 = hamilton q1 (hamilton q2 (conjugate q1))
 
 {-| Rotate a vector v by the unit quaternion q -}
 vrotate : Quaternion -> Vec3 -> Vec3
--- vrotate q v = toVec3 <| hamilton (multv q v) (conjugate q)
--- vrotate q v = toVec3 <| hamilton q (vmult v (conjugate q))
-vrotate q v = toVec3 <| hamilton q (hamilton (fromSV (0, v)) (conjugate q))
+vrotate q v = toVec3 <| hamilton q (hamilton (fromVec3 v) (conjugate q))
 
 {-| Construction from angle, axis.
 This will create a unit quaternion if given a unit vector.
