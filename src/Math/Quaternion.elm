@@ -31,7 +31,7 @@ values are documented.
 @docs Quaternion
 
 # Create
-@docs unit, quaternion, fromRecord, fromTuple, fromScalar, fromVec3, fromScalarVector, orient, fromTo, fromTo2
+@docs unit, quaternion, fromRecord, fromTuple, fromScalar, fromVec3, fromScalarVector, orient, fromTo
 
 # Get and Set
 @docs getScalar, getI, getJ, getK, setScalar, setI, setJ, setK
@@ -220,15 +220,9 @@ vrotate : Quaternion -> Vec3 -> Vec3
 vrotate q v = toVec3 <| hamilton q (hamilton (fromVec3 v) (conjugate q))
 
 {-| Quaternion from two vectors -}
-fromTo : Vec3 -> Vec3 -> Quaternion
-fromTo v1 v2 =
-    let d2 l1 l2 = sqrt (l1*l1 * l2*l2) in
-    normalize <| fromScalarVector (d2 (V3.length v1) (V3.length v2) + V3.dot v1 v2, V3.cross v1 v2)
-
-{-| Quaternion from two vectors -}
 -- http://lolengine.net/blog/2014/02/24/quaternion-from-two-vectors-final
-fromTo2 : Vec3 -> Vec3 -> Quaternion
-fromTo2 u v =
+fromTo : Vec3 -> Vec3 -> Quaternion
+fromTo u v =
     let norm_u_norm_v = sqrt (V3.dot u u * V3.dot v v)
         real_part0 = norm_u_norm_v + V3.dot u v
         (real_part, w) =
