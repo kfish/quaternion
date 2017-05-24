@@ -31,7 +31,7 @@ values are documented.
 @docs Quaternion
 
 # Create
-@docs unit, quaternion, fromAngleAxis, fromRecord, fromSV, fromScalar, fromTo, fromTo2, fromTuple, fromVec3, orient, fromYawPitchRoll, toYawPitchRoll
+@docs unit, quaternion, fromAngleAxis, fromRecord, fromScalarVector, fromScalar, fromTo, fromTo2, fromTuple, fromVec3, orient, fromYawPitchRoll, toYawPitchRoll
 
 # Get and Set
 @docs getI, getJ, getK, getScalar, getAngle, getAxis, setI, setJ, setK, setScalar
@@ -41,7 +41,7 @@ values are documented.
 
 
 # Conversions
-@docs toMat4, toRecord, toSV, toTuple, toVec3
+@docs toMat4, toRecord, toScalarVector, toTuple, toVec3
 
 # Co-ordinate systems
 Rigid Body Dynamics, Inertial Reference Frames,
@@ -127,14 +127,14 @@ fromRecord : { s:Float, i:Float, j:Float, k:Float } -> Quaternion
 fromRecord {s,i,j,k} = quaternion s i j k
 
 {-| Convert a quaternion to a tuple of (scalar, vector) -}
-toSV : Quaternion -> (Float, Vec3)
-toSV q =
+toScalarVector : Quaternion -> (Float, Vec3)
+toScalarVector q =
     let {x,y,z,w} = V4.toRecord q
     in (x, vec3 y z w)
 
 {-| Construct a Quaternion from its representation as a scalar and a vector -}
-fromSV : (Float, Vec3) -> Quaternion
-fromSV (s,v) =
+fromScalarVector : (Float, Vec3) -> Quaternion
+fromScalarVector (s,v) =
     let {x,y,z} = V3.toRecord v
     in quaternion s x y z
 
@@ -186,12 +186,12 @@ hamilton q1 q2 =
                   (a1*c2 - b1*d2 + c1*a2 + d1*b2)
                   (a1*d2 + b1*c2 - c1*b2 + d1*a2)
 {-
-    let (s1, v1) = toSV q1
-        (s2, v2) = toSV q2
+    let (s1, v1) = toScalarVector q1
+        (s2, v2) = toScalarVector q2
         s = s1*s2 - V3.dot v1 v2
         v3_add = V3.add
         v = V3.scale s1 v2 `v3_add` V3.scale s2 v1 `v3_add` V3.cross v1 v2
-    in fromSV (s,v)
+    in fromScalarVector (s,v)
 -}
 
 {-| Multiplication of a quaternion by a vector -}
@@ -221,7 +221,7 @@ getAxis q = V3.normalize (toVec3 q)
 fromTo : Vec3 -> Vec3 -> Quaternion
 fromTo v1 v2 =
     let d2 l1 l2 = sqrt (l1*l1 * l2*l2) in
-    normalize <| fromSV (d2 (V3.length v1) (V3.length v2) + V3.dot v1 v2, V3.cross v1 v2)
+    normalize <| fromScalarVector (d2 (V3.length v1) (V3.length v2) + V3.dot v1 v2, V3.cross v1 v2)
 
 {-| Quaternion from two vectors -}
 -- http://lolengine.net/blog/2014/02/24/quaternion-from-two-vectors-final
@@ -240,7 +240,7 @@ fromTo2 u v =
             else
                 (real_part0, V3.cross u v)
 
-    in normalize <| fromSV (real_part, w)
+    in normalize <| fromScalarVector (real_part, w)
 
 {-| Rotate quaternion q1 by quaternion q2 -}
 rotate : Quaternion -> Quaternion -> Quaternion

@@ -80,11 +80,11 @@ testIdentity =
                         , floatEqual input.j output.j
                         , floatEqual input.k output.k
                         ]
-        , fuzz Fuzz.scalarVector "(fromSV >> toSV) sv == sv" <|
+        , fuzz Fuzz.scalarVector "(fromScalarVector >> toScalarVector) sv == sv" <|
             \( s, v ) ->
                 let
                     ( s_, v_ ) =
-                        (fromSV >> toSV) ( s, v )
+                        (fromScalarVector >> toScalarVector) ( s, v )
                 in
                     Expect.all_
                         [ floatEqual s s_
