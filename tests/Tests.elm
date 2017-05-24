@@ -17,6 +17,7 @@ all =
         [ testTrivial
         , testGetterSetter
         , testIdentity
+        , testFromTo
         , testAngleAxis
         , testOperators
         , testMultiplication
@@ -92,6 +93,14 @@ testIdentity =
                         ]
         , fuzz Fuzz.vec3 "(fromVec3 >> toVec3) v == v" <|
             \v -> (fromVec3 >> toVec3) v |> vec3Equal v
+        ]
+
+
+testFromTo : Test
+testFromTo =
+    describe "Construction from two vectors"
+        [ fuzz2 Fuzz.unitVec3 Fuzz.unitVec3 "vrotate (fromTo u v) u == v" <|
+            \u v -> vrotate (fromTo u v) u |> vec3Equal v
         ]
 
 
