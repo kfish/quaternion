@@ -6,6 +6,7 @@ module QnFuzz
         , rotationQuaternion
         , angle
         , vec3
+        , nonZeroVec3
         , unitVec3
         , floatTuple3
         , floatTuple4

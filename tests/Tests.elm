@@ -50,9 +50,9 @@ testAngleAxis =
 testRotation : Test
 testRotation =
     describe "Rotation tests"
-        [ fuzz3 Fuzz.float Fuzz.vec3 Fuzz.vec3 "Vector rotation via Angle Axis" <|
+        [ fuzz3 Fuzz.float Fuzz.nonZeroVec3 Fuzz.vec3 "Vector rotation via Angle Axis" <|
             \angle axis v ->
-                Qn.vrotate (Qn.fromAngleAxis angle (V3.normalize axis)) v
+                Qn.vrotate (Qn.fromAngleAxis angle axis) v
                     |> vec3Equal (M4.transform (M4.makeRotate angle axis) v)
         ]
 

@@ -239,7 +239,7 @@ This will create a unit quaternion if given a unit vector.
 -}
 fromAngleAxis : Float -> Vec3 -> Quaternion
 fromAngleAxis angle axis =
-    let {x,y,z} = V3.toRecord axis
+    let {x,y,z} = V3.toRecord (V3.normalize axis)
         theta = angle / 2.0
         c = cos theta
         s = sin theta
