@@ -151,6 +151,6 @@ testAngleAxisYawPitchRoll =
 testMatrix4Conversion : Test
 testMatrix4Conversion =
     describe "Conversion to Matrix4"
-        [ fuzz2 Fuzz.rotationQuaternion Fuzz.unitVec3 "(toMat4 >> transform) == vrotate" <|
+        [ fuzz2 Fuzz.rotationQuaternion Fuzz.nonZeroVec3 "(toMat4 >> transform) == vrotate" <|
             \q v -> M4.transform (Qn.toMat4 q) v |> vec3Equal (Qn.vrotate q v)
         ]
