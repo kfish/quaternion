@@ -68,6 +68,7 @@ vec3 : Fuzzer Vec3
 vec3 =
     Fuzz.map3 V3.vec3 float float float
 
+
 nonZeroVec3 : Fuzzer Vec3
 nonZeroVec3 =
     conditional
@@ -76,6 +77,7 @@ nonZeroVec3 =
         , condition = \v -> v /= V3.vec3 0 0 0
         }
         vec3
+
 
 unitVec3 : Fuzzer Vec3
 unitVec3 =
