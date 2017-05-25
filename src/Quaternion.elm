@@ -73,8 +73,8 @@ unit : Quaternion
 unit = Internal.unit
 
 {-| Construct a quaternion from an orientation vector -}
-orient : Vec3 -> Quaternion
-orient v = Internal.normalize (Internal.fromVec3 v)
+fromVec3 : Vec3 -> Quaternion
+fromVec3 v = Internal.normalize (Internal.fromVec3 v)
 
 {-| Quaternion from two vectors -}
 fromTo : Vec3 -> Vec3 -> Quaternion
@@ -89,8 +89,8 @@ conjugate : Quaternion -> Quaternion
 conjugate = Internal.conjugate
 
 {-| Hamilton product -}
-hamilton : Quaternion -> Quaternion -> Quaternion
-hamilton = Internal.hamilton
+multiply : Quaternion -> Quaternion -> Quaternion
+multiply = Internal.hamilton
 
 {-| Rotate a vector v by the unit quaternion q -}
 vrotate : Quaternion -> Vec3 -> Vec3
