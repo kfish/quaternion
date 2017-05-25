@@ -28,8 +28,8 @@ all =
 testFromTo : Test
 testFromTo =
     describe "Construction from two vectors"
-        [ fuzz2 Fuzz.nonZeroVec3 Fuzz.nonZeroVec3 "vrotate (fromTo u v) u == v" <|
-            \u v -> vrotate (fromTo u v) u |> vec3Collinear v
+        [ fuzz2 Fuzz.nonZeroVec3 Fuzz.nonZeroVec3 "rotate (fromTo u v) u == v" <|
+            \u v -> Qn.rotate (fromTo u v) u |> vec3Collinear v
         , fuzz Fuzz.nonZeroVec3 "fromTo v v == unit" <|
             \v -> fromTo v v |> qnEqual unit
         ]
@@ -52,7 +52,7 @@ testRotation =
     describe "Rotation tests"
         [ fuzz3 Fuzz.float Fuzz.nonZeroVec3 Fuzz.vec3 "Vector rotation via Angle Axis" <|
             \angle axis v ->
-                Qn.vrotate (Qn.fromAngleAxis angle axis) v
+                Qn.rotate (Qn.fromAngleAxis angle axis) v
                     |> vec3Equal (M4.transform (M4.makeRotate angle axis) v)
         ]
 
@@ -152,5 +152,5 @@ testMatrix4Conversion : Test
 testMatrix4Conversion =
     describe "Conversion to Matrix4"
         [ fuzz2 Fuzz.rotationQuaternion Fuzz.nonZeroVec3 "(toMat4 >> transform) == vrotate" <|
-            \q v -> M4.transform (Qn.toMat4 q) v |> vec3Equal (Qn.vrotate q v)
+            \q v -> M4.transform (Qn.toMat4 q) v |> vec3Equal (Qn.rotate q v)
         ]

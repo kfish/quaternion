@@ -93,8 +93,8 @@ multiply : Quaternion -> Quaternion -> Quaternion
 multiply = Internal.hamilton
 
 {-| Rotate a vector v by the unit quaternion q -}
-vrotate : Quaternion -> Vec3 -> Vec3
-vrotate = Internal.vrotate
+rotate : Quaternion -> Vec3 -> Vec3
+rotate = Internal.vrotate
 
 {-| Construction from angle, axis.
 This will create a unit quaternion if given a unit vector.
