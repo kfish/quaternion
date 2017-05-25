@@ -38,7 +38,7 @@ testFromTo =
 testAngleAxis : Test
 testAngleAxis =
     describe "Angle-Axis representation"
-        [ fuzz2 Fuzz.angle Fuzz.unitVec3 "(fromAngleAxis >> getAngle)" <|
+        [ fuzz2 Fuzz.angle Fuzz.nonZeroVec3 "(fromAngleAxis >> getAngle)" <|
             \angle axis -> fromAngleAxis angle axis |> getAngle |> floatEqual angle
         , fuzz2 Fuzz.angle Fuzz.unitVec3 "(fromAngleAxis >> getAxis)" <|
             \angle axis -> fromAngleAxis angle axis |> getAxis |> vec3Equal axis
