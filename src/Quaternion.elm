@@ -121,7 +121,6 @@ fromYawPitchRoll : (Float, Float, Float) -> Quaternion
 fromYawPitchRoll = Internal.fromYawPitchRoll
 
 {-| Convert a unit quaternion to Yaw, Pitch, Roll
-http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/index.htm
 -}
 toYawPitchRoll : Quaternion -> (Float, Float, Float)
 toYawPitchRoll = Internal.toYawPitchRoll
