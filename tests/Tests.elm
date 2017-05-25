@@ -28,9 +28,9 @@ all =
 testFromTo : Test
 testFromTo =
     describe "Construction from two vectors"
-        [ fuzz2 Fuzz.unitVec3 Fuzz.unitVec3 "vrotate (fromTo u v) u == v" <|
-            \u v -> vrotate (fromTo u v) u |> vec3Equal v
-        , fuzz Fuzz.unitVec3 "fromTo v v == unit" <|
+        [ fuzz2 Fuzz.nonZeroVec3 Fuzz.nonZeroVec3 "vrotate (fromTo u v) u == v" <|
+            \u v -> vrotate (fromTo u v) u |> vec3Collinear v
+        , fuzz Fuzz.nonZeroVec3 "fromTo v v == unit" <|
             \v -> fromTo v v |> qnEqual unit
         ]
 

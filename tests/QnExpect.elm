@@ -5,6 +5,7 @@ module QnExpect
         , angleEqual
         , qnEqual
         , vec3Equal
+        , vec3Collinear
         )
 
 import Expect exposing (Expectation)
@@ -112,3 +113,8 @@ vec3Equal =
         equateWith
             (renderResult ("Components not within tolerance " ++ toString tolerance))
             (vec3ComponentRelativeTolerance tolerance)
+
+
+vec3Collinear : Vec3 -> Vec3 -> Expectation
+vec3Collinear u v =
+    vec3Equal (V3.normalize u) (V3.normalize v)
