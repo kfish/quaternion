@@ -89,10 +89,6 @@ fromVec3 v =
     let {x,y,z} = V3.toRecord v
     in vec4 0 x y z
 
-{-| Construct a quaternion from an orientation vector -}
-orient : Vec3 -> Quaternion
-orient v = normalize (fromVec3 v)
-
 {-| Construct a Quaternion from its representation as a scalar and a vector -}
 fromScalarVector : (Float, Vec3) -> Quaternion
 fromScalarVector (s,v) =
