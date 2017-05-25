@@ -68,10 +68,18 @@ vec3 : Fuzzer Vec3
 vec3 =
     Fuzz.map3 V3.vec3 float float float
 
+nonZeroVec3 : Fuzzer Vec3
+nonZeroVec3 =
+    conditional
+        { retries = 10
+        , fallback = always V3.i
+        , condition = \v -> v /= V3.vec3 0 0 0
+        }
+        vec3
 
 unitVec3 : Fuzzer Vec3
 unitVec3 =
-    Fuzz.map V3.normalize vec3
+    Fuzz.map V3.normalize nonZeroVec3
 
 
 floatTuple3 : Fuzzer ( Float, Float, Float )
