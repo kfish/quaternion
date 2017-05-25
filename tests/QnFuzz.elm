@@ -16,7 +16,7 @@ module QnFuzz
 
 import Fuzz exposing (Fuzzer, float, floatRange)
 import Fuzz exposing (map, andThen, constant)
-import Math.Quaternion as Qn exposing (Quaternion)
+import Internal.Quaternion as Qn exposing (Quaternion)
 import Math.Vector3 as V3 exposing (Vec3)
 
 

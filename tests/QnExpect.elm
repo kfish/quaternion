@@ -8,7 +8,7 @@ module QnExpect
         )
 
 import Expect exposing (Expectation)
-import Math.Quaternion as Qn exposing (Quaternion, getScalar, getI, getJ, getK)
+import Internal.Quaternion as Qn exposing (Quaternion, getScalar, getI, getJ, getK)
 import Math.Vector3 as V3 exposing (Vec3, getX, getY, getZ)
 
 

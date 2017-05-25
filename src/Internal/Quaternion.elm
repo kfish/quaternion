@@ -1,4 +1,4 @@
-module Math.Quaternion exposing (..)
+module Internal.Quaternion exposing (..)
 
 {-|
 
