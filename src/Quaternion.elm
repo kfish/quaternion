@@ -145,6 +145,13 @@ toYawPitchRoll =
     Internal.toYawPitchRoll
 
 
+{-| Extract the axis of rotation
+-}
+toVec3 : Quaternion -> Vec3
+toVec3 =
+    Internal.toVec3
+
+
 {-| Convert to a Mat4
 -}
 toMat4 : Quaternion -> M4.Mat4
