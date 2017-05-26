@@ -5,6 +5,7 @@ module Quaternion exposing (..)
 This API exposes only normalized quaternions (ie. length=1).
 To use arbitrary quaternions, import Internal.Quaternion.
 
+
 # Types
 
 @docs Quaternion
