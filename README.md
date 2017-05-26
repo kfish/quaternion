@@ -6,7 +6,7 @@ _Impossible transforms are inexpressible_
 
 [travis]: https://travis-ci.org/kfish/quaternion
 
-
+<!--
 Quaternions have the following advantages over matrix transformations:
 
 * No gimbal lock
@@ -19,9 +19,11 @@ understand.
 A design goal of this library is to be easy to understand.
 
 The underlying problem of representing rotations in 3D space is inherently difficult.
+-->
 
 ## Motivation
 
+<!--
 Can express rotations, but not shearing, scaling or translations
 
 Translations are trivial
@@ -34,7 +36,7 @@ So, a combination of translation and orientation (via quaternions)
 is everything you need for world transforms.
 
 Also, quaternions are faster than matrices due to 4 components not 9.
-
+-->
 
 [How I learned to Stop Worrying and Love Quaternions](http://developerblog.myo.com/quaternions/)
 
@@ -69,6 +71,8 @@ Also, quaternions are faster than matrices due to 4 components not 9.
 ## References
 
 [Euclidean Space: Quaternions](http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/)
+
+[3D Game Engine Programming: Understanding Quaternions](https://www.3dgep.com/understanding-quaternions/)
 
 @BrettHoutz paper on [Quaternions](https://people.ucsc.edu/~bhoutz/quaternions.pdf)
 
