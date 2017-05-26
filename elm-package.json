@@ -1,8 +1,8 @@
 {
     "version": "1.0.0",
-    "summary": "Quaternions",
+    "summary": "Fast 3D rotation and orientation",
     "repository": "https://github.com/kfish/quaternion.git",
-    "license": "BSD3",
+    "license": "MIT",
     "source-directories": [
         "src"
     ],
