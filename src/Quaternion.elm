@@ -2,33 +2,8 @@ module Quaternion exposing (..)
 
 {-| Quaternions
 
-Can express rotations, but not shearing, scaling or translations
-
-Translations are trivial
-
-Shearing and scaling don't happen in the real world
-
-Scaling is trivial
-
-So, a combination of translation and orientation (via quaternions)
-is everything you need for world transforms.
-
-Impossible transforms are inexpressible
-
-Also, quaternions are faster than matrices due to 4 components not 9.
-
-
-# API Design
-
-This API exposes only normalized quaternions (ie. length=1). To use arbitrary quaternions,
-import Internal.Quaternion.
-
-This API is designed for efficiency: input ranges are documented, but
-input values are not sanitized. For example, most rotation operations
-require unit quaternions and unit axis vectors. Rather than normalizing
-all inputs, which would add sqrt calls to all functions, the expected
-values are documented.
-
+This API exposes only normalized quaternions (ie. length=1).
+To use arbitrary quaternions, import Internal.Quaternion.
 
 # Types
 
@@ -58,14 +33,6 @@ values are documented.
 # Conversions
 
 @docs toVec3, toMat4
-
-
-# Co-ordinate systems
-
-Rigid Body Dynamics, Inertial Reference Frames,
-and Graphics Coordinate Systems:
-A Resolution of Conflicting Conventions and Terminology
-<http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.58.99&rep=rep1&type=pdf>
 
 -}
 
