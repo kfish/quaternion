@@ -34,13 +34,13 @@ values are documented.
 @docs Quaternion
 
 # Create
-@docs quaternion, unit, orient, fromTo
+@docs quaternion, unit, fromVec3, fromTo
 
 # Angle-Axis representation
 @docs fromAngleAxis, getAngle, getAxis
 
 # Operations
-@docs negate, conjugate, hamilton, vrotate
+@docs negate, conjugate, multiply, rotate
 
 # Yaw-Pitch-Roll
 @docs fromYawPitchRoll, toYawPitchRoll
@@ -94,7 +94,7 @@ multiply = Internal.hamilton
 
 {-| Rotate a vector v by the unit quaternion q -}
 rotate : Quaternion -> Vec3 -> Vec3
-rotate = Internal.vrotate
+rotate = Internal.rotateV
 
 {-| Construction from angle, axis.
 This will create a unit quaternion if given a unit vector.

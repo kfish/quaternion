@@ -31,13 +31,13 @@ values are documented.
 @docs Quaternion
 
 # Create
-@docs unit, quaternion, fromRecord, fromTuple, fromScalar, fromVec3, fromScalarVector, orient, fromTo
+@docs unit, quaternion, fromRecord, fromTuple, fromScalar, fromVec3, fromScalarVector, fromTo
 
 # Get and Set
 @docs getScalar, getI, getJ, getK, setScalar, setI, setJ, setK
 
 # Operations
-@docs length, lengthSquared, normalize, negate, scale, add, sub, conjugate, hamilton, vmult, vrotate, multv, rotate
+@docs length, lengthSquared, normalize, negate, scale, add, sub, conjugate, hamilton, vmult, rotateV, multv, rotateQ
 
 # Angle-Axis representation
 @docs fromAngleAxis, getAngle, getAxis
@@ -208,12 +208,12 @@ vmult : Vec3 -> Quaternion -> Quaternion
 vmult v q = hamilton (fromVec3 v) q
 
 {-| Rotate quaternion q1 by quaternion q2 -}
-rotate : Quaternion -> Quaternion -> Quaternion
-rotate q1 q2 = hamilton q1 (hamilton q2 (conjugate q1))
+rotateQ : Quaternion -> Quaternion -> Quaternion
+rotateQ q1 q2 = hamilton q1 (hamilton q2 (conjugate q1))
 
 {-| Rotate a vector v by the unit quaternion q -}
-vrotate : Quaternion -> Vec3 -> Vec3
-vrotate q = fromVec3 >> rotate q >> toVec3
+rotateV : Quaternion -> Vec3 -> Vec3
+rotateV q = fromVec3 >> rotateQ q >> toVec3
 
 {-| Quaternion from two vectors -}
 -- http://lolengine.net/blog/2014/02/24/quaternion-from-two-vectors-final
