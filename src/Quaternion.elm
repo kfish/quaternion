@@ -13,7 +13,7 @@ To use arbitrary quaternions, import Internal.Quaternion.
 
 # Create
 
-@docs quaternion, unit, fromVec3, fromTo
+@docs unit, fromVec3, fromTo
 
 
 # Angle-Axis representation
@@ -33,7 +33,7 @@ To use arbitrary quaternions, import Internal.Quaternion.
 
 # Conversions
 
-@docs toVec3, toMat4
+@docs toMat4
 
 -}
 
@@ -46,13 +46,6 @@ import Math.Vector3 as V3 exposing (Vec3, vec3)
 -}
 type alias Quaternion =
     Internal.Quaternion
-
-
-{-| Creates a normalized quaternion with the given x, y, z, and w values.
--}
-quaternion : Float -> Float -> Float -> Float -> Quaternion
-quaternion x y z w =
-    Internal.normalize (Internal.quaternion x y z w)
 
 
 {-| Construction of a unit quaternion
@@ -143,13 +136,6 @@ fromYawPitchRoll =
 toYawPitchRoll : Quaternion -> ( Float, Float, Float )
 toYawPitchRoll =
     Internal.toYawPitchRoll
-
-
-{-| Extract the axis of rotation
--}
-toVec3 : Quaternion -> Vec3
-toVec3 =
-    Internal.toVec3
 
 
 {-| Convert to a Mat4
