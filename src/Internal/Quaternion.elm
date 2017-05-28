@@ -496,6 +496,17 @@ toYawPitchRoll q =
         ( yaw, pitch, roll )
 
 
+{-| Is the quaternion near vertical, either up or down?
+-}
+nearVertical : Quaternion -> Bool
+nearVertical q =
+    let
+        ( q0, q1, q2, q3 ) =
+            V4.toTuple q
+    in
+        (abs (q2 * q2 + q3 * q3) > 0.499)
+
+
 {-| Convert to a Mat4
 -}
 toMat4 : Quaternion -> M4.Mat4

@@ -42,21 +42,12 @@ unitQuaternion =
     Fuzz.map Qn.normalize nonZeroQuaternion
 
 
-qnNotVertical : Quaternion -> Bool
-qnNotVertical q =
-    let
-        ( q0, q1, q2, q3 ) =
-            V4.toTuple q
-    in
-        (abs (q2 * q2 + q3 * q3) <= 0.499)
-
-
 rotationQuaternion : Fuzzer Quaternion
 rotationQuaternion =
     conditional
         { retries = 10
         , fallback = always Qn.unit
-        , condition = qnNotVertical
+        , condition = not << Qn.nearVertical
         }
         unitQuaternion
 
