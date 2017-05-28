@@ -93,14 +93,14 @@ quaternion =
 -}
 unit : Quaternion
 unit =
-    vec4 1 0 0 0
+    vec4 0 0 0 1
 
 
 {-| Convert a record to a quaternion.
 -}
 fromRecord : { s : Float, i : Float, j : Float, k : Float } -> Quaternion
 fromRecord { s, i, j, k } =
-    quaternion s i j k
+    quaternion i j k s
 
 
 {-| Convert a tuple to a quaternion.
@@ -114,7 +114,7 @@ fromTuple =
 -}
 fromScalar : Float -> Quaternion
 fromScalar s =
-    vec4 s 0 0 0
+    vec4 0 0 0 s
 
 
 {-| Construction of a right quaternion
@@ -125,7 +125,7 @@ fromVec3 v =
         { x, y, z } =
             V3.toRecord v
     in
-        vec4 0 x y z
+        vec4 x y z 0
 
 
 {-| Construct a Quaternion from its representation as a scalar and a vector
@@ -136,63 +136,63 @@ fromScalarVector ( s, v ) =
         { x, y, z } =
             V3.toRecord v
     in
-        quaternion s x y z
+        quaternion x y z s
 
 
 {-| Extract the scalar component of a quaternion.
 -}
 getScalar : Quaternion -> Float
 getScalar =
-    V4.getX
+    V4.getW
 
 
 {-| Extract the i component of a quaternion.
 -}
 getI : Quaternion -> Float
 getI =
-    V4.getY
+    V4.getX
 
 
 {-| Extract the j component of a quaternion.
 -}
 getJ : Quaternion -> Float
 getJ =
-    V4.getZ
+    V4.getY
 
 
 {-| Extract the k component of a quaternion.
 -}
 getK : Quaternion -> Float
 getK =
-    V4.getW
+    V4.getZ
 
 
 {-| Update the scalar component of a quaternion, returning a new quaternion.
 -}
 setScalar : Float -> Quaternion -> Quaternion
 setScalar =
-    V4.setX
+    V4.setW
 
 
 {-| Update the i component of a quaternion, returning a new quaternion.
 -}
 setI : Float -> Quaternion -> Quaternion
 setI =
-    V4.setY
+    V4.setX
 
 
 {-| Update the j component of a quaternion, returning a new quaternion.
 -}
 setJ : Float -> Quaternion -> Quaternion
 setJ =
-    V4.setZ
+    V4.setY
 
 
 {-| Update the k component of a quaternion, returning a new quaternion.
 -}
 setK : Float -> Quaternion -> Quaternion
 setK =
-    V4.setW
+    V4.setZ
 
 
 {-| Convert a quaternion to a record.
@@ -203,7 +203,7 @@ toRecord q =
         { x, y, z, w } =
             V4.toRecord q
     in
-        { s = x, i = y, j = z, k = w }
+        { s = w, i = x, j = y, k = z }
 
 
 {-| Convert a quaternion to a tuple.
@@ -221,7 +221,7 @@ toScalarVector q =
         { x, y, z, w } =
             V4.toRecord q
     in
-        ( x, vec3 y z w )
+        ( w, vec3 x y z )
 
 
 {-| Extract the axis of rotation
@@ -232,7 +232,7 @@ toVec3 q =
         { x, y, z, w } =
             V4.toRecord q
     in
-        vec3 y z w
+        vec3 x y z
 
 
 {-| The length of the given quaternion: |a|
@@ -292,7 +292,7 @@ conjugate q =
         { x, y, z, w } =
             V4.toRecord q
     in
-        fromRecord { s = x, i = -y, j = -z, k = -w }
+        fromRecord { s = w, i = -x, j = -y, k = -z }
 
 
 {-| Hamilton product
@@ -300,16 +300,17 @@ conjugate q =
 hamilton : Quaternion -> Quaternion -> Quaternion
 hamilton q1 q2 =
     let
-        ( a1, b1, c1, d1 ) =
+        ( b1, c1, d1, a1 ) =
             toTuple q1
 
-        ( a2, b2, c2, d2 ) =
+        ( b2, c2, d2, a2 ) =
             toTuple q2
     in
-        quaternion (a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2)
+        quaternion
             (a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2)
             (a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2)
             (a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2)
+            (a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2)
 
 
 
@@ -402,7 +403,7 @@ fromAngleAxis angle axis =
         s =
             sin theta
     in
-        vec4 c (x * s) (y * s) (z * s)
+        quaternion (x * s) (y * s) (z * s) c
 
 
 {-| Angle of rotation.
@@ -459,7 +460,7 @@ fromYawPitchRoll ( yaw, pitch, roll ) =
         q3 =
             sYaw * cRoll * cPitch - cYaw * sRoll * sPitch
     in
-        quaternion q0 q1 q2 q3
+        quaternion q1 q2 q3 q0
 
 
 {-| Convert a unit quaternion to Yaw, Pitch, Roll
@@ -468,7 +469,7 @@ fromYawPitchRoll ( yaw, pitch, roll ) =
 toYawPitchRoll : Quaternion -> ( Float, Float, Float )
 toYawPitchRoll q =
     let
-        ( q0, q1, q2, q3 ) =
+        ( q1, q2, q3, q0 ) =
             toTuple q
 
         q2q2 =

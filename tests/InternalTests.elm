@@ -107,13 +107,13 @@ all =
         testCayleyGraph =
             let
                 i =
-                    Qn.quaternion 0 1 0 0
+                    Qn.quaternion 1 0 0 0
 
                 j =
-                    Qn.quaternion 0 0 1 0
+                    Qn.quaternion 0 1 0 0
 
                 k =
-                    Qn.quaternion 0 0 0 1
+                    Qn.quaternion 0 0 1 0
             in
                 describe "Cayley graph of Q(8)"
                     [ describe "Multiplication on the right by i"
