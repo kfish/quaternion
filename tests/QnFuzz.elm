@@ -19,6 +19,7 @@ import Fuzz exposing (Fuzzer, float, floatRange)
 import Fuzz exposing (map, andThen, constant)
 import Internal.Quaternion as Qn exposing (Quaternion)
 import Math.Vector3 as V3 exposing (Vec3)
+import Math.Vector4 as V4
 
 
 quaternion : Fuzzer Quaternion
@@ -45,7 +46,7 @@ qnNotVertical : Quaternion -> Bool
 qnNotVertical q =
     let
         ( q0, q1, q2, q3 ) =
-            Qn.toTuple q
+            V4.toTuple q
     in
         (abs (q2 * q2 + q3 * q3) <= 0.499)
 

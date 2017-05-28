@@ -34,7 +34,7 @@ values are documented.
 
 # Create
 
-@docs unit, quaternion, fromRecord, fromTuple, fromScalar, fromVec3, fromScalarVector, fromTo
+@docs unit, quaternion, fromScalar, fromVec3, fromScalarVector, fromTo
 
 
 # Get and Set
@@ -59,7 +59,7 @@ values are documented.
 
 # Conversions
 
-@docs toRecord, toTuple, toScalarVector, toVec3, toMat4
+@docs toScalarVector, toVec3, toMat4
 
 
 # Co-ordinate systems
@@ -94,20 +94,6 @@ quaternion =
 unit : Quaternion
 unit =
     vec4 0 0 0 1
-
-
-{-| Convert a record to a quaternion.
--}
-fromRecord : { s : Float, i : Float, j : Float, k : Float } -> Quaternion
-fromRecord { s, i, j, k } =
-    quaternion i j k s
-
-
-{-| Convert a tuple to a quaternion.
--}
-fromTuple : ( Float, Float, Float, Float ) -> Quaternion
-fromTuple =
-    V4.fromTuple
 
 
 {-| Construction of a scalar quaternion
@@ -195,24 +181,6 @@ setK =
     V4.setZ
 
 
-{-| Convert a quaternion to a record.
--}
-toRecord : Quaternion -> { s : Float, i : Float, j : Float, k : Float }
-toRecord q =
-    let
-        { x, y, z, w } =
-            V4.toRecord q
-    in
-        { s = w, i = x, j = y, k = z }
-
-
-{-| Convert a quaternion to a tuple.
--}
-toTuple : Quaternion -> ( Float, Float, Float, Float )
-toTuple =
-    V4.toTuple
-
-
 {-| Convert a quaternion to a tuple of (scalar, vector)
 -}
 toScalarVector : Quaternion -> ( Float, Vec3 )
@@ -292,7 +260,7 @@ conjugate q =
         { x, y, z, w } =
             V4.toRecord q
     in
-        fromRecord { s = w, i = -x, j = -y, k = -z }
+        V4.fromTuple ( -x, -y, -z, w )
 
 
 {-| Hamilton product
@@ -301,10 +269,10 @@ hamilton : Quaternion -> Quaternion -> Quaternion
 hamilton q1 q2 =
     let
         ( b1, c1, d1, a1 ) =
-            toTuple q1
+            V4.toTuple q1
 
         ( b2, c2, d2, a2 ) =
-            toTuple q2
+            V4.toTuple q2
     in
         quaternion
             (a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2)
@@ -470,7 +438,7 @@ toYawPitchRoll : Quaternion -> ( Float, Float, Float )
 toYawPitchRoll q =
     let
         ( q1, q2, q3, q0 ) =
-            toTuple q
+            V4.toTuple q
 
         q2q2 =
             q2 * q2

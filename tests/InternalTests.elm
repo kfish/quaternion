@@ -40,31 +40,7 @@ all =
         testIdentity : Test
         testIdentity =
             describe "Identity tests"
-                [ fuzz Fuzz.floatTuple4 "(fromTuple >> toTuple) t == t" <|
-                    \( s, i, j, k ) ->
-                        let
-                            ( s_, i_, j_, k_ ) =
-                                (fromTuple >> toTuple) ( s, i, j, k )
-                        in
-                            Expect.all_
-                                [ floatEqual s s_
-                                , floatEqual i i_
-                                , floatEqual j j_
-                                , floatEqual k k_
-                                ]
-                , fuzz Fuzz.floatRecord4 "(fromRecord >> toRecord) r == r" <|
-                    \input ->
-                        let
-                            output =
-                                (fromRecord >> toRecord) input
-                        in
-                            Expect.all_
-                                [ floatEqual input.s output.s
-                                , floatEqual input.i output.i
-                                , floatEqual input.j output.j
-                                , floatEqual input.k output.k
-                                ]
-                , fuzz Fuzz.scalarVector "(fromScalarVector >> toScalarVector) sv == sv" <|
+                [ fuzz Fuzz.scalarVector "(fromScalarVector >> toScalarVector) sv == sv" <|
                     \( s, v ) ->
                         let
                             ( s_, v_ ) =
