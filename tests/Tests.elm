@@ -114,24 +114,14 @@ all =
 
         testAngleAxisYawPitchRoll : Test
         testAngleAxisYawPitchRoll =
-            let
-                i =
-                    Qn.quaternion 0 1 0 0
-
-                j =
-                    Qn.quaternion 0 0 1 0
-
-                k =
-                    Qn.quaternion 0 0 0 1
-            in
-                describe "Angle Axis representation"
-                    [ fuzz Fuzz.float "Yaw is rotation about the z axis" <|
-                        \f -> Qn.fromAngleAxis f V3.k |> qnEqual (Qn.fromYawPitchRoll ( f, 0, 0 ))
-                    , fuzz Fuzz.float "Pitch is rotation about the y axis" <|
-                        \f -> Qn.fromAngleAxis f V3.j |> qnEqual (Qn.fromYawPitchRoll ( 0, f, 0 ))
-                    , fuzz Fuzz.float "Roll is rotation about the x axis" <|
-                        \f -> Qn.fromAngleAxis f V3.i |> qnEqual (Qn.fromYawPitchRoll ( 0, 0, f ))
-                    ]
+            describe "Angle Axis representation"
+                [ fuzz Fuzz.float "Yaw is rotation about the z axis" <|
+                    \f -> Qn.fromAngleAxis f V3.k |> qnEqual (Qn.fromYawPitchRoll ( f, 0, 0 ))
+                , fuzz Fuzz.float "Pitch is rotation about the y axis" <|
+                    \f -> Qn.fromAngleAxis f V3.j |> qnEqual (Qn.fromYawPitchRoll ( 0, f, 0 ))
+                , fuzz Fuzz.float "Roll is rotation about the x axis" <|
+                    \f -> Qn.fromAngleAxis f V3.i |> qnEqual (Qn.fromYawPitchRoll ( 0, 0, f ))
+                ]
 
         testMatrix4Conversion : Test
         testMatrix4Conversion =
