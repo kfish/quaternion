@@ -37,7 +37,7 @@ To use arbitrary quaternions, import Internal.Quaternion.
 
 -}
 
-import Internal.Quaternion as Internal
+import Quaternion.Internal as Internal
 import Math.Matrix4 as M4
 import Math.Vector3 as V3 exposing (Vec3, vec3)
 

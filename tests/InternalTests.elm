@@ -6,7 +6,7 @@ import Fuzz
 import String
 import Math.Matrix4 as M4
 import Math.Vector3 as V3
-import Internal.Quaternion as Qn exposing (..)
+import Quaternion.Internal as Qn exposing (..)
 import QnExpect as Expect exposing (..)
 import QnFuzz as Fuzz exposing (..)
 

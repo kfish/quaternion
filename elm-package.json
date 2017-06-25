@@ -8,7 +8,7 @@
     ],
     "exposed-modules": [
         "Quaternion",
-        "Internal.Quaternion"
+        "Quaternion.Internal"
     ],
     "dependencies": {
         "elm-community/elm-test": "4.0.0 <= v < 5.0.0",

@@ -1,4 +1,4 @@
-module Internal.Quaternion exposing (..)
+module Quaternion.Internal exposing (..)
 
 {-| Quaternions
 
