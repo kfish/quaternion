@@ -54,7 +54,7 @@ values are documented.
 
 # Yaw-Pitch-Roll
 
-@docs fromYawPitchRoll, toYawPitchRoll
+@docs fromYawPitchRoll, toYawPitchRoll, nearVertical
 
 
 # Conversions
