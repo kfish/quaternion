@@ -135,8 +135,8 @@ all =
             , testFromTo
             , testAngleAxis
             , testRotation
-
             , testYawPitchRoll
             , testAngleAxisYawPitchRoll
-            -- , testMatrix4Conversion
+
+            , testMatrix4Conversion
             ]

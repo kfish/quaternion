@@ -512,9 +512,24 @@ nearVertical q =
 toMat4 : Quaternion -> M4.Mat4
 toMat4 q =
     let
-        ( yaw, pitch, roll ) =
-            toYawPitchRoll q
+        ( x, y, z, w ) =
+            ( getI q, getJ q, getK q, getScalar q )
     in
-        M4.makeRotate yaw V3.k
-            |> M4.rotate pitch V3.j
-            |> M4.rotate roll V3.i
+        M4.fromRecord
+            { m11 = 1 - 2 * y * y - 2 * z * z
+            , m12 = 2 * x * y - 2 * w * z
+            , m13 = 2 * x * z + 2 * w * y
+            , m14 = 0
+            , m21 = 2 * x * y + 2 * w * z
+            , m22 = 1 - 2 * x * x - 2 * z * z
+            , m23 = 2 * y * z - 2 * w * x
+            , m24 = 0
+            , m31 = 2 * x * z - 2 * w * y
+            , m32 = 2 * y * z + 2 * w * x
+            , m33 = 1 - 2 * x * x - 2 * y * y
+            , m34 = 0
+            , m41 = 0
+            , m42 = 0
+            , m43 = 0
+            , m44 = 1
+            }
