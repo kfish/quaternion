@@ -533,3 +533,47 @@ toMat4 q =
             , m43 = 0
             , m44 = 1
             }
+
+
+-- http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/index.htm
+slerp : Float -> Quaternion -> Quaterion -> Quaternion
+slerp t qa qb =
+    let
+        -- Calculate angle between them.
+        cosHalfTheta = V4.dot qa qb
+
+        halfTheta = acos cosHalfTheta
+        sinHalfTheta = sqrt (1.0 - cosHalfTheta*cosHalfTheta)
+
+        ( aw, ax, ay, az ) =
+            V4.toTuple qa
+
+        ( bw, bx, by, bz ) =
+            V4.toTuple qb
+
+        hw = aw * 0.5 + bw * 0.5
+        hx = ax * 0.5 + bx * 0.5
+        hy = ay * 0.5 + by * 0.5
+        hz = az * 0.5 + bz * 0.5
+
+        ratioA = sin((1 - t) * halfTheta) / sinHalfTheta
+        ratioB = sin(t * halfTheta) / sinHalfTheta
+
+        //calculate Quaternion.
+        mw = aw * ratioA + bw * ratioB
+        mx = ax * ratioA + bx * ratioB
+        my = ay * ratioA + by * ratioB
+        mz = az * ratioA + bz * ratioB
+        return qm;
+    in
+        -- if qa=qb or qa=-qb then theta = 0 and we can return qa
+        if abs cosHalfTheta >= 1.0 then
+            qa
+
+        -- if theta = 180 degrees then result is not fully defined
+        -- we could rotate around any axis normal to qa or qb
+        else if abs sinHalfTheta  < 0.001 then
+            quaternion hw hx hy hz
+
+        else
+            quaternion mw mx my mz
