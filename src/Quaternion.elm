@@ -143,3 +143,10 @@ toYawPitchRoll =
 toMat4 : Quaternion -> M4.Mat4
 toMat4 =
     Internal.toMat4
+
+
+{-| Spherical linear interpolation
+ -}
+slerp : Float -> Quaternion -> Quaterion -> Quaternion
+slerp =
+    Internal.slerp
