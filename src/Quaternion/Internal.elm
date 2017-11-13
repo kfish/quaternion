@@ -44,7 +44,7 @@ values are documented.
 
 # Operations
 
-@docs length, lengthSquared, normalize, negate, scale, add, sub, conjugate, hamilton, vmult, rotateV, multv, rotateQ
+@docs length, lengthSquared, normalize, negate, scale, add, sub, conjugate, hamilton, vmult, rotateV, multv, rotateQ, slerp
 
 
 # Angle-Axis representation
@@ -535,8 +535,10 @@ toMat4 q =
             }
 
 
--- http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/index.htm
-slerp : Float -> Quaternion -> Quaterion -> Quaternion
+{-| Spherical linear interpolation
+http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/index.htm
+ -}
+slerp : Float -> Quaternion -> Quaternion -> Quaternion
 slerp t qa qb =
     let
         -- Calculate angle between them.
@@ -559,12 +561,10 @@ slerp t qa qb =
         ratioA = sin((1 - t) * halfTheta) / sinHalfTheta
         ratioB = sin(t * halfTheta) / sinHalfTheta
 
-        //calculate Quaternion.
         mw = aw * ratioA + bw * ratioB
         mx = ax * ratioA + bx * ratioB
         my = ay * ratioA + by * ratioB
         mz = az * ratioA + bz * ratioB
-        return qm;
     in
         -- if qa=qb or qa=-qb then theta = 0 and we can return qa
         if abs cosHalfTheta >= 1.0 then

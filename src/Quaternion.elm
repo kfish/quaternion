@@ -23,7 +23,7 @@ To use arbitrary quaternions, import Internal.Quaternion.
 
 # Operations
 
-@docs negate, conjugate, multiply, rotate
+@docs negate, conjugate, multiply, rotate, slerp
 
 
 # Yaw-Pitch-Roll
@@ -147,6 +147,6 @@ toMat4 =
 
 {-| Spherical linear interpolation
  -}
-slerp : Float -> Quaternion -> Quaterion -> Quaternion
+slerp : Float -> Quaternion -> Quaternion -> Quaternion
 slerp =
     Internal.slerp
